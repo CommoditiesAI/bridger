@@ -1,6 +1,6 @@
 #' @title createGraphic
 #'
-#' @description Create the graphic hand
+#' @description Create the graphic of the hand
 #'
 #' @return ggplot graphic object
 #'
@@ -60,7 +60,7 @@ createGraphic <- function(handNo, handN, handE, handS, handW, dealer, vuln, poin
   # Create central compass rose
   compass <- ggplot() +
     geom_rect(aes(xmin = -0.3, xmax = 0.3, ymin = -0.3, ymax = 0.3), fill = "white") +
-    # For square around dealer
+    # For square box around dealer
     # geom_rect(aes(xmin = dealerPos[1]*0.25-0.06, xmax = dealerPos[1]*0.25+0.06, ymin = dealerPos[2]*0.25-0.06, ymax = dealerPos[2]*0.25+0.06),
     #                                   colour = "darkgrey", fill = "steelblue", alpha = 0.4) +
     geom_point(aes(x = dealerPos[1] * 0.25, y = dealerPos[2] * 0.25),
@@ -136,21 +136,13 @@ createGraphic <- function(handNo, handN, handE, handS, handW, dealer, vuln, poin
     }
   }
 
-  # # Image of hands to add later
+  # # Image of card hand to add later for background/top-right grob
   #   graphic <- system.file("extdata", "hand_image.png", package = "cowplot")
 
   hand_graphic <- cowplot::plot_grid(
     grob_header, grob_N, NULL,
     grob_W, compass, grob_E,
     grob_points, grob_S, NULL
-  )
-
-  # Save graphic
-  ggsave(glue::glue("{Sys.getenv('HOME')}/bridger/hand_{handNo}.png",
-    handNo = glue::glue_collapse(handNo)
-  ),
-  hand_graphic,
-  width = 20, height = 20, units = "cm"
   )
 
   invisible(hand_graphic)

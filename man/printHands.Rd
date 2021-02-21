@@ -4,22 +4,49 @@
 \alias{printHands}
 \title{printHands}
 \usage{
-printHands(handType = "any", num = 12, ...)
+printHands(
+  ids = FALSE,
+  seats = FALSE,
+  handType = "any",
+  num = 12,
+  output = "a",
+  saveOutput = TRUE,
+  ...
+)
 }
 \arguments{
+\item{ids}{The ids of hands to be generated}
+
+\item{seats}{The seats of the hands in ids, i.e. the seat which gives the requested conditions}
+
 \item{handType}{The type of hand required, default is 'any'.  Alternatives include, '4441', 'strong', ...}
 
-\item{num}{The number of hands wanted - Make divisible by 6}
+\item{num}{The number of hands wanted}
+
+\item{output}{Character code to indicates required outputs, "N/"S" for the North or South hands, "a" for all hands}
+
+\item{saveOutput}{If true (default) saves PDF to the c:/temp/bridger directory, otherwise produces only a temp file}
 
 \item{...}{Other variables that may be passed when selecting compliant hands}
 }
 \description{
-Produce a graphic of hands on a single page, useful as a hand-out.  Each page can hold upto 6 hands.
+Produce a graphic of hands as a hand-out.  Each page can hold up to 6 hands.
+
+  Pages of all the hands, or only the south or north hands can be selected.  In output the presence of "a" will
+  produce pages with all hands, while "n", "e", "s" or "w" will include only the specified hands.  "all" is equivalent
+  to "anews".
+
+  The output will be a PDF for the selected hand sets.  These will be saved to the c:/bridger/ directory, if saveOutput
+  is set to TRUE, or to temporary, notified files if set to false.
 }
 \examples{
-# Produce 2 pages of 6 hands of bridge hands
-printHands()
+# Produce 1 hand showing only one seat
+printHands(handType = "any", num = 1, output = "news")
 
-# Produce a page of 6 hands likely to open with a 3-level preempt
-printHands(num = 6, handType = "preempt3")
+# Produce a page of 6 South hands likely to open with a 3-level preempt
+printHands(handType = "preempt3", num = 6, output = "s")
+
+# Produce specified hands
+printHands(ids = c(500, 501, 502), seats = c("E", "W", "S"))
+
 }

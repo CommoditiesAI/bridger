@@ -27,5 +27,5 @@ createGraphic(handNo, handN, handE, handS, handW, dealer, vuln, points)
 ggplot graphic object
 }
 \description{
-Create the graphic hand
+Create the graphic of the hand
 }

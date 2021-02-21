@@ -11,6 +11,7 @@
 #' @import ggplot2
 #' @import patchwork
 #' @importFrom grDevices cairo_pdf
+#' @importFrom ggedit remove_geom
 #' @importFrom magrittr %>%
 #' @importFrom pdftools pdf_combine
 
@@ -36,6 +37,5 @@
 }
 
 .onAttach <- function(libname, pkgname) {
-  packageStartupMessage("\n        --- bridger --- \n For all your bridge hand needs\n
-All hands will be saved to the '.../Documents/bridger' directory\n")
+  packageStartupMessage("\n        --- bridger --- \n For all your bridge hand needs\n")
 }
