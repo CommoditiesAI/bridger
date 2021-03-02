@@ -1,11 +1,11 @@
 Package: bridger
 Type: Package
-Title: Bridge hand producer
-Version: 0.1.2
+Title: Bridge hand generator with criteria selector
+Version: 1.1.0
 Authors@R: c(person("Jason", "Kaplan", role = c("aut", "cre"),
-                     email = "jason.kaplan@commoditiesanalysis.co.uk"))
+                     email = "scjase@gmail.com"))
 Author: Jason Kaplan [aut, cre]
-Maintainer: The package maintainer <jason.kaplan@commoditiesanalysis.co.uk>
+Maintainer: Jason Kaplan <scjase@gmail.com>
 Description: Produce bridge hands and allows parameters for hands to be specific for bidding practice.
 License: GPL (>= 3)
 Encoding: UTF-8

@@ -16,7 +16,7 @@ find_2preempt(HC_low = 5, HC_high = 10, cardLen_low = 6, cardLen_high = 7)
 \item{cardLen_high}{The maximum length of a suit}
 }
 \value{
-FALSE if not compliant, or id and seat of compliant hand
+id and seat of compliant hand
 }
 \description{
 Find hands that are likely to preempt at the 2 level in a major

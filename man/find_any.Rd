@@ -10,7 +10,7 @@ find_any(HC_low = 12)
 \item{HC_low}{The minimum number of high-card points}
 }
 \value{
-FALSE if not compliant, or id and seat of compliant hand
+id and seat of compliant hand
 }
 \description{
 Return any bridge hand - Default

@@ -28,11 +28,17 @@ The most common will be to specify the low and high high-card range and the shor
 Existing functions and key parameters are given.
 \tabular{rccccc}{
   \tab Type \tab HC_low \tab HC_high \tab cardLen_low \tab cardLen_high \cr
+  \tab Simple \tab \tab \tab \tab \cr
+  \tab 1major \tab \tab \tab \tab \cr
   \tab NT \tab 12 \tab 14 \tab 2 \tab 4 \cr
   \tab 4441 \tab 12 \tab 14 \tab 1 \tab 4 \cr
   \tab strong \tab 19  \tab 30 \tab 0 \tab 8 \cr
   \tab preempt2 \tab 5 \tab 10 \tab 0 \tab 6 \cr
   \tab preempt3 \tab 6 \tab 9 \tab 0 \tab 7 \cr
+  \tab Complex \tab \tab \tab \tab \cr
+  \tab 1NT_double \tab \tab \tab \tab \cr
+  \tab 1NT_bid \tab \tab \tab \tab \cr
+  \tab 1major_jacoby2NT \tab canape \tab \tab \tab \cr
  }
 
 Other parameters are also used, but individually assigned in the function.

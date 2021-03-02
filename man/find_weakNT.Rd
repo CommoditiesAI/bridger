@@ -16,7 +16,7 @@ find_weakNT(HC_low = 12, HC_high = 14, cardLen_low = 2, cardLen_high = 4)
 \item{cardLen_high}{The maximum length of a suit}
 }
 \value{
-FALSE if not compliant, or id and seat of compliant hand
+id and seat of compliant hand
 }
 \description{
 Find hands that comply with a no trump opening

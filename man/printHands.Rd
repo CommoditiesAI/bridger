@@ -9,8 +9,8 @@ printHands(
   seats = FALSE,
   handType = "any",
   num = 12,
-  output = "a",
-  saveOutput = TRUE,
+  output = "F",
+  saveOutputDir = "c:/temp/bridger/",
   ...
 )
 }
@@ -23,30 +23,33 @@ printHands(
 
 \item{num}{The number of hands wanted}
 
-\item{output}{Character code to indicates required outputs, "N/"S" for the North or South hands, "a" for all hands}
+\item{output}{Character code of required outputs, "N", "E", "S", "W" for the respective hands, "F" for the full hand NB "ALL" equivalent to "FNEWS"}
 
-\item{saveOutput}{If true (default) saves PDF to the c:/temp/bridger directory, otherwise produces only a temp file}
+\item{saveOutputDir}{The location for saving the output pages, Set to NULL to save to a temporary directory}
 
 \item{...}{Other variables that may be passed when selecting compliant hands}
 }
 \description{
 Produce a graphic of hands as a hand-out.  Each page can hold up to 6 hands.
 
-  Pages of all the hands, or only the south or north hands can be selected.  In output the presence of "a" will
-  produce pages with all hands, while "n", "e", "s" or "w" will include only the specified hands.  "all" is equivalent
-  to "anews".
+  Pages of full hands, or only one set of hands can be selected.  "ALL" is equivalent to FULL and separate pages of
+  each of the four positions.  "N", "E", "S" or "W" will produce only show the points and hands for those positions.
 
-  The output will be a PDF for the selected hand sets.  These will be saved to the c:/bridger/ directory, if saveOutput
+  The output will be a PDF for the selected hand sets.  These will be saved to the 'c:/temp/bridger/' directory, if saveOutput
   is set to TRUE, or to temporary, notified files if set to false.
 }
 \examples{
 # Produce 1 hand showing only one seat
-printHands(handType = "any", num = 1, output = "news")
+printHands(handType = "any", num = 1, output = "ALL")
 
 # Produce a page of 6 South hands likely to open with a 3-level preempt
-printHands(handType = "preempt3", num = 6, output = "s")
+\dontrun{
+    printHands(handType = "preempt3", num = 6, output = "S")
+}
 
 # Produce specified hands
-printHands(ids = c(500, 501, 502), seats = c("E", "W", "S"))
+\dontrun{
+    printHands(ids = c(500, 501, 502), seats = c("E", "W", "S"))
+ }
 
 }

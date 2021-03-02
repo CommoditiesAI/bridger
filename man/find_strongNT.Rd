@@ -16,7 +16,7 @@ find_strongNT(HC_low = 15, HC_high = 17, cardLen_low = 2, cardLen_high = 5)
 \item{cardLen_high}{The maximum length of a suit}
 }
 \value{
-FALSE if not compliant, or id and seat of compliant hand
+id and seat of compliant hand
 }
 \description{
 Find hands that comply with a weak no trump opening

@@ -2,9 +2,9 @@
 % Please edit documentation in R/bridgeHandFinders.R
 \name{find_4441}
 \alias{find_4441}
-\title{@title find_4441}
+\title{find_4441}
 \usage{
-find_4441(HC_low = 11, HC_high = 35, cardLen_low = 5, cardLen_high = 13)
+find_4441(HC_low = 12, HC_high = 35, cardLen_low = 5, cardLen_high = 13)
 }
 \arguments{
 \item{HC_low}{The minimum number of high-card points}
@@ -16,7 +16,7 @@ find_4441(HC_low = 11, HC_high = 35, cardLen_low = 5, cardLen_high = 13)
 \item{cardLen_high}{The maximum length of a suit}
 }
 \value{
-FALSE if not compliant, or id and seat of compliant hand
+id and seat of compliant hand
 }
 \description{
 Find hands that comply with a 4441 shape and opening point count

@@ -16,7 +16,7 @@ find_strong(HC_low = 19, HC_high = 35, cardLen_low = 1, cardLen_high = 5)
 \item{cardLen_high}{The maximum length of a suit}
 }
 \value{
-FALSE if not compliant, or id and seat of compliant hand
+id and seat of compliant hand
 }
 \description{
 Find hands that are strong enough to open strong
