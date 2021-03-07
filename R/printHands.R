@@ -20,26 +20,37 @@
 #' # Produce 1 hand showing only one seat
 #' printHands(handType = "any", num = 1, output = "ALL")
 #'
-#' # Produce a page of 6 South hands likely to open with a 3-level preempt
 #' \dontrun{
+#' # Produce a page of 6 South hands likely to open with a 3-level preempt
 #'     printHands(handType = "preempt3", num = 6, output = "S")
-#' }
 #'
 #' # Produce specified hands
-#' \dontrun{
 #'     printHands(ids = c(500, 501, 502), seats = c("E", "W", "S"))
-#'  }
+#' }
 #'
 #' @export
 
 printHands <- function(ids = FALSE, seats = FALSE, handType = "any", num = 12, output = "F", saveOutputDir = "c:/temp/bridger/", ...) {
 
+  # Add a timer
+    startTme <- Sys.time()
+
   # Check output complies
     output <- tolower(output)
 
-    if(output == "all") {
-      output <- "fnews"
+    if(output %in% c("all", "a")) {
+      output <- "fnesw"
     }
+
+    check_output <- output
+    for(i in c("a", "f", "n", "e", "s", "w")) {
+      check_output <- stringr::str_replace(check_output, i, "")
+    }
+
+    if(!check_output == "") {
+      stop(glue::glue("Unknown output type '{check_output}' requested"))
+    }
+
 
   # Check bridger directory exists, if requested to save there
   if(!is.null(saveOutputDir)) {
@@ -84,6 +95,7 @@ printHands <- function(ids = FALSE, seats = FALSE, handType = "any", num = 12, o
   handTypeName <- dplyr::case_when(
   # Simple hands
     handType == "any" ~ "an unspecified opening bid",
+    handType %in% c("1major", "major1") ~ "a 1-level major bid",
     handType %in% c("weakNT", "weakbalanced", "weaknt") ~ "a weak, balanced shape",
     handType %in% c("strongNT", "strongbalanced", "strongnt") ~ "a strong balanced shape",
     handType %in% c("strong", "strong2", "2level") ~ "a strong or 2-level opening bid",
@@ -92,9 +104,9 @@ printHands <- function(ids = FALSE, seats = FALSE, handType = "any", num = 12, o
     handType %in% c("1444", "4144", "4414", "4441") ~ "a '4441' shape",
 
   # Composite hands
-    handType %in% c("weak1NTdouble", "weak1NTx", "double_after_NT", "1NT-double") ~ "weak 1NT\nfollowed by double by LHO",
-    handType %in% c("weak1NTbid", "bid_after_NT", "1NT-bid") ~ "weak 1NT\nfollowed by an overcall by LHO",
-    handType %in% c("weak1NTRHObid", "RHObid_after_NT", "1NT-RHObid") ~ "weak 1NT\nfollowed by an overcall by RHO",
+    handType %in% c("weak1NTdouble", "weak1NTx", "double-after-NT", "1NT_double") ~ "weak 1NT\nfollowed by double by LHO",
+    handType %in% c("weak1NTbid", "bid-after-NT", "1NT_LHObid") ~ "weak 1NT\nfollowed by an overcall by LHO",
+    handType %in% c("weak1NTRHObid", "RHObid-after-NT", "1NT_RHObid") ~ "weak 1NT\nfollowed by an overcall by RHO",
     handType %in% c("jacoby2NT") ~ "a 1-level major\nfollowed by partner responding Jacoby 2NT",
 
     handType == TRUE ~ handType
@@ -166,6 +178,7 @@ printHands <- function(ids = FALSE, seats = FALSE, handType = "any", num = 12, o
 
         # Remove extra hands
         hands[, i]$graphic <- hands[, i]$graphic %>%
+          ggedit::remove_geom("grob", 8) %>% # Remove LTC
           ggedit::remove_geom("grob", 5) %>% # Remove East
           ggedit::remove_geom("grob", 3) %>% # Remove West
           ggedit::remove_geom("grob", 2) # Remove North
@@ -223,6 +236,7 @@ printHands <- function(ids = FALSE, seats = FALSE, handType = "any", num = 12, o
 
       # Remove extra hands
       hands[, i]$graphic <- hands[, i]$graphic %>%
+        ggedit::remove_geom("grob", 8) %>% # Remove LTC
         ggedit::remove_geom("grob", 7) %>% # Remove South
         ggedit::remove_geom("grob", 5) %>% # Remove East
         ggedit::remove_geom("grob", 2) # Remove North
@@ -279,6 +293,7 @@ printHands <- function(ids = FALSE, seats = FALSE, handType = "any", num = 12, o
 
       # Remove extra hands
       hands[, i]$graphic <- hands[, i]$graphic %>%
+        ggedit::remove_geom("grob", 8) %>% # Remove LTC
         ggedit::remove_geom("grob", 7) %>% # Remove South
         ggedit::remove_geom("grob", 5) %>% # Remove East
         ggedit::remove_geom("grob", 3) # Remove West
@@ -335,6 +350,7 @@ printHands <- function(ids = FALSE, seats = FALSE, handType = "any", num = 12, o
 
       # Remove extra hands
       hands[, i]$graphic <- hands[, i]$graphic %>%
+        ggedit::remove_geom("grob", 8) %>% # Remove LTC
         ggedit::remove_geom("grob", 7) %>% # Remove South
         ggedit::remove_geom("grob", 3) %>% # Remove West
         ggedit::remove_geom("grob", 2) # Remove North
@@ -371,6 +387,9 @@ printHands <- function(ids = FALSE, seats = FALSE, handType = "any", num = 12, o
   }
 
   # Finish ----
+  message(glue::glue(" --- Time taken: {as.numeric(ttime)} {attr(ttime, 'units')} ({round(as.numeric(ttime)/num,2)} {attr(ttime, 'units')} per hand) ---",
+          ttime = round(Sys.time()-startTme, 2)))
+
   return(glue::glue("{sets} of {length(chunks)} {pages} of hands saved to {saveOutputDir}",
                     sets = ifelse(nchar(output) == 1, "A set", glue::glue("{nchar(output)} sets")),
                     pages = ifelse(length(chunks) == 1, "page", "pages")))

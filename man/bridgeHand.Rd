@@ -4,7 +4,13 @@
 \alias{bridgeHand}
 \title{bridgeHand}
 \usage{
-bridgeHand(handNumber = "auto", seat = FALSE, createGraphic = TRUE, ...)
+bridgeHand(
+  handNumber = "auto",
+  seat = FALSE,
+  createGraphic = TRUE,
+  LTC = "original",
+  ...
+)
 }
 \arguments{
 \item{handNumber}{An integer for generating a hand, or "auto" to use a random number generator}
@@ -13,27 +19,31 @@ bridgeHand(handNumber = "auto", seat = FALSE, createGraphic = TRUE, ...)
 
 \item{createGraphic}{Whether the graphic should be created}
 
-\item{...}{Other parameters passed to shape the hands}
+\item{LTC}{Whether to include losing trick count - FALSE for none, "original" or "new" for schemas}
+
+\item{...}{Other parameters used in  hand evaluation}
 }
 \value{
-List: Hand ID, Dealer, Hand graphic, Hand points, Hand shape
+List: Hand ID, Dealer, Hand graphic, Hand points, Hand shape, vulnerability
 }
 \description{
 Generate a bridge hand
 }
 \note{
-To change the scoring of hands pass high card values (HCValues) and hand shape values (shapeValues) in the arguments.
+To change the hand evaluation pass high card values (HCValues) and shape values (shapeValues) in the arguments.
 
-HCValues is a string of five digits specifying the value of the Ace, King, Queen, Jack and 10.  The default is , 3, 2, 1, 0.
-shapeValues is a string of eight digits specifying the value of a suit with no cards/"Void", 1-card/"Singleton", ... 7-cards.  The default is c(3, 2, 1, 0, 0, 1, 2, 3)
+  HCValues is a string of five digits specifying the value of the Ace, King, Queen, Jack and 10.
+  The default is the Milton Work scale of 4, 3, 2, 1, 0.
+  shapeValues is a string of eight digits specifying the value of a suit with no cards/"Void", 1-card/"Singleton", ... 7-cards.
+  The default is c(3, 2, 1, 0, 0, 1, 2, 3)
+  Losing Trick Count (LTCSchema) 'Original' or 'New' as described at https://en.wikipedia.org/wiki/Losing-Trick_Count.
+  This assumes a fit will be found.  It is currently not implemented.
 }
 \examples{
 # Produce a bridge hand
 hand <- bridgeHand()
 
-# Produce a bridge hand 500 ensuring South as dealer
-hand500 <- bridgeHand(handNumber = "500", seat = "S") # Seat can be any compass-point
+# Produce a bridge hand '500' ensuring South as dealer
+hand500 <- bridgeHand(handNumber = "500", seat = "S") # Seat can be any compass point
 
-# Produce a bridge hand, with South as dealer, but without generating the graphic
-handIDonly <- bridgeHand(seat = "W", createGraphic = FALSE)
 }

@@ -94,9 +94,18 @@ createGraphic <- function(handNo, handN, handE, handS, handW, dealer, vuln, poin
   handS[handS == "T"] <- "10"
   handW[handW == "T"] <- "10"
 
-  # Show hands
+  # Build grobs ----
   grob_header <- gridExtra::tableGrob(header, rows = NULL, theme = boxTheme)
-  grob_points <- gridExtra::tableGrob(points, rows = NULL, theme = boxTheme)
+  grob_points <- points %>%
+    select(1:4) %>%
+    gridExtra::tableGrob(rows = NULL, theme = boxTheme)
+  if(is.na(points[1,5])) {
+    grob_ltc <- NULL
+  } else {
+    grob_ltc <- points %>%
+      select(c(1,5)) %>%
+      gridExtra::tableGrob(rows = NULL, theme = boxTheme)
+  }
 
   grob_N <- gridExtra::tableGrob(t(handN), cols = NULL, theme = handTheme)
   grob_E <- gridExtra::tableGrob(t(handE), cols = NULL, theme = handTheme)
@@ -142,7 +151,7 @@ createGraphic <- function(handNo, handN, handE, handS, handW, dealer, vuln, poin
   hand_graphic <- cowplot::plot_grid(
     grob_header, grob_N, NULL,
     grob_W, compass, grob_E,
-    grob_points, grob_S, NULL
+    grob_points, grob_S, grob_ltc
   )
 
   invisible(hand_graphic)

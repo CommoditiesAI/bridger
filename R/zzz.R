@@ -14,16 +14,11 @@
 #' @importFrom ggedit remove_geom
 #' @importFrom magrittr %>%
 #' @importFrom pdftools pdf_combine
+#' @importFrom stringr str_count str_detect
+#' @importFrom scales percent
 
 
 .onLoad <- function(libname, pkgname) {
-  bridgerDir <- glue::glue("{Sys.getenv('HOME')}/bridger/")
-
-  # Check directory for saving outputs exists, create if not
-  if (!dir.exists(bridgerDir)) {
-    dir.create(bridgerDir, recursive = TRUE)
-  }
-
   # Set global variables for non-standard evaluation - Prevents warnings when compiling
   utils::globalVariables(c(
     "compliant_hands", "%>%", ".", "C", "D", "H", "HC", "S", "Shape", "aes", "any_vars", "arrange", "arrow",
@@ -32,7 +27,8 @@
     "mutate", "na.omit", "name", "parse_number", "pivot_longer", "pivot_wider", "rowid",
     "rowid_to_column", "rowwise", "runif", "select", "separate", "shape", "suit", "summarise",
     "theme", "theme_void", "tibble", "ungroup", "unit", "unite", "value", "plot_annotation", "plot_layout",
-    "printHand_1", "printHand_2", "printHand_3", "printHand_4", "printHand_5", "printHand_6", "handNo", "points"
+    "printHand_1", "printHand_2", "printHand_3", "printHand_4", "printHand_5", "printHand_6", "handNo", "points",
+    "LTC", "Total", "Probability"
   ))
 }
 

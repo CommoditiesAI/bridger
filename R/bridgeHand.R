@@ -3,32 +3,45 @@
 #' @description Generate a bridge hand
 #'
 #' @note
-#' To change the scoring of hands pass high card values (HCValues) and hand shape values (shapeValues) in the arguments.
+#' To change the hand evaluation pass high card values (HCValues) and shape values (shapeValues) in the arguments.
 #'
-#' HCValues is a string of five digits specifying the value of the Ace, King, Queen, Jack and 10.  The default is , 3, 2, 1, 0.
-#' shapeValues is a string of eight digits specifying the value of a suit with no cards/"Void", 1-card/"Singleton", ... 7-cards.  The default is c(3, 2, 1, 0, 0, 1, 2, 3)
+#'   HCValues is a string of five digits specifying the value of the Ace, King, Queen, Jack and 10.
+#'   The default is the Milton Work scale of 4, 3, 2, 1, 0.
+#'   shapeValues is a string of eight digits specifying the value of a suit with no cards/"Void", 1-card/"Singleton", ... 7-cards.
+#'   The default is c(3, 2, 1, 0, 0, 1, 2, 3)
+#'   Losing Trick Count (LTCSchema) 'Original' or 'New' as described at https://en.wikipedia.org/wiki/Losing-Trick_Count.
+#'   This assumes a fit will be found.  It is currently not implemented.
 #'
-#' @return List: Hand ID, Dealer, Hand graphic, Hand points, Hand shape
+#' @return List: Hand ID, Dealer, Hand graphic, Hand points, Hand shape, vulnerability
 #'
 #' @param handNumber An integer for generating a hand, or "auto" to use a random number generator
 #' @param seat If not false, makes the specified seat South and dealer, so all bidding starts with South and the specified hand type
 #' @param createGraphic Whether the graphic should be created
-#' @param ... Other parameters passed to shape the hands
+#' @param LTC Whether to include losing trick count - FALSE for none, "original" or "new" for schemas
+#' @param ... Other parameters used in  hand evaluation
 #'
 #' @examples
 #' # Produce a bridge hand
 #' hand <- bridgeHand()
 #'
-#' # Produce a bridge hand 500 ensuring South as dealer
-#' hand500 <- bridgeHand(handNumber = "500", seat = "S") # Seat can be any compass-point
+#' # Produce a bridge hand '500' ensuring South as dealer
+#' hand500 <- bridgeHand(handNumber = "500", seat = "S") # Seat can be any compass point
 #'
-#' # Produce a bridge hand, with South as dealer, but without generating the graphic
-#' handIDonly <- bridgeHand(seat = "W", createGraphic = FALSE)
 #' @export
 
-bridgeHand <- function(handNumber = "auto", seat = FALSE, createGraphic = TRUE, ...) {
+bridgeHand <- function(handNumber = "auto", seat = FALSE, createGraphic = TRUE, LTC = "original", ...) {
 
-  # Parse out the optional parameters
+  # Check for valid handNumber
+  if(handNumber != "auto" & !is.numeric(handNumber)) {
+    stop("Only numeric seeds allowed for handNumbers")
+  }
+
+  # Apply if more than one handId given ----
+  if (length(handNumber) > 1) {
+    lapply(handNumber, bridgeHand, seat = seat, createGraphic = createGraphic, LTC = LTC, ...)
+  }
+
+  # Parse out the optional parameters ----
   args <- as.list(list(...))
 
   if ("HCValues" %in% names(args)) {
@@ -45,25 +58,19 @@ bridgeHand <- function(handNumber = "auto", seat = FALSE, createGraphic = TRUE, 
     shapeValues <- c(3, 2, 1, 0, 0, 1, 2, 3)
   }
 
+  if ("LTC" != FALSE) {
+    LTCSchema <- LTC
+  } else {
+    LTCSchema <- FALSE
+  }
+
   # Constants ----
   suits <- c("S", "H", "D", "C")
   compassPoints <- c("N", "E", "S", "W")
 
   # Set seed - Use given seed or choose a random one ----
   if (handNumber != "auto") {
-    if (length(handNumber) > 1) {
-      lapply(handNumber, bridgeHand)
-    }
-    if (!is.double(handNumber)) {
-      if (!is.double(readr::parse_number(handNumber))) {
-        print("Only numeric seeds allowed")
-        stop()
-      } else {
-        handNo <- readr::parse_number(handNumber)
-      }
-    } else {
       handNo <- handNumber
-    }
   } else {
     handNo <- round(runif(1) * 10000000, 0)
   }
@@ -71,6 +78,7 @@ bridgeHand <- function(handNumber = "auto", seat = FALSE, createGraphic = TRUE, 
   set.seed(handNo)
 
   # Set dealer and vulnerability
+  # TODO This will be fixed on the same seed number - Check?
   vuln <- c("None", "NS", "EW", "Both")[sample(1:4, 1)]
 
   # If a specified seat is given, then always set dealer to that seat
@@ -178,10 +186,10 @@ bridgeHand <- function(handNumber = "auto", seat = FALSE, createGraphic = TRUE, 
   }
 
   # Assess hands ----
-  # Identify points
+  # Count high-card points
   names(HCValues) <- c("A", "K", "Q", "J", "10")
 
-  points <- tibble::tibble(Hand = compassPoints, HC = 0L, Shape = 0L)
+  points <- tibble::tibble(Hand = compassPoints, HC = 0L, Shape = 0L, LTC = 0L)
 
   for (i in compassPoints) {
     temp <- get(glue::glue("hand{i}")) %>%
@@ -201,7 +209,7 @@ bridgeHand <- function(handNumber = "auto", seat = FALSE, createGraphic = TRUE, 
     ), 0)
   }
 
-  # Identify voids, singletons and long suits for points
+  # Identify voids, singletons and long suits for shape points
   for (i in compassPoints) {
     hand_shape <- get(glue::glue("hand{i}")) %>%
       tibble::rowid_to_column() %>%
@@ -225,14 +233,61 @@ bridgeHand <- function(handNumber = "auto", seat = FALSE, createGraphic = TRUE, 
 
     # Look for Void and add 2 points (3 - 1 for counted singleton)
     temp_points <- temp_points + sum(get(glue::glue("hand{i}"))[1, ] == "Void") * shapeValues[1]
-
     points[points$Hand == i, "Shape"] <- temp_points
   }
 
   # Calculate total points
   points <- points %>%
     dplyr::rowwise() %>%
-    dplyr::mutate(Total = sum(HC + Shape))
+    dplyr::mutate(Total = sum(HC + Shape)) %>%
+    dplyr::relocate(LTC, .after = Total)
+
+  # Calculate losing trick count ---
+  if(LTCSchema != FALSE) {
+    for (i in compassPoints) {
+      current_hand <- get(glue::glue("hand{i}")) %>%
+        dplyr::slice(1:3) %>%
+        dplyr::mutate(across(.cols = everything(), as.character)) %>%
+        dplyr::mutate(across(.cols = everything(), ~ ifelse(.x %in% c("A", "K", "Q", " ", "Void"), .x, "x")))
+
+      # Start with 0 or 1 if there is no ace in the suit
+      ltc <- ifelse(any(stringr::str_detect(unname(unlist(current_hand)), "A")), 0, 1)
+
+      for(j in suits) {
+        suit_shape <- select(current_hand, all_of(j)) %>%
+          unname() %>% unlist() %>%
+          glue::glue_collapse()
+
+        # Alternative counting and adjustments possible
+        # https://en.wikipedia.org/wiki/Losing-Trick_Count#Refinements
+        if(LTCSchema == "original") {
+          temp_ltc <- 0 +
+            stringr::str_count(suit_shape, "Void|A  |AK |AKQ") * 0 + # For completness
+            stringr::str_count(suit_shape, "AQ |Ax |AKx|AQx|K  |KQ |Kx |KQx|Q  |x  ") * 1 +
+            stringr::str_count(suit_shape, "Axx|Kxx|Qx |Qxx|xx ") * 2 +
+            stringr::str_count(suit_shape, "xxx") * 3
+        } else if(LTCSchema == "new") {
+          temp_ltc <- 0 +
+            stringr::str_count(suit_shape, "Void|A  |AK |AKQ") * 0 + # For completness
+            stringr::str_count(suit_shape, "AKx") * 0.5 +
+            stringr::str_count(suit_shape, "AQx|Ax |AQ ") * 1 +
+            stringr::str_count(suit_shape, "K  |Q  |x  |Axx|KQx|KQ |Kx ") * 1.5 +
+            stringr::str_count(suit_shape, "Kxx") * 2 +
+            stringr::str_count(suit_shape, "Qx |Qxx|xx ") * 2.5 +
+            stringr::str_count(suit_shape, "xxx") * 3
+        }
+      ltc <- ltc + ceiling(temp_ltc) # Rounded up and add to previous
+    }
+
+      points[points$Hand == i, "LTC"] <- ltc
+    }
+  } else {
+    points[points$Hand == i, "LTC"] <- NA
+  }
+
+  # Rename LTC column in points
+  points <- points %>%
+    dplyr::rename_with(~ glue::glue("LTC ({LTCSchema})"), LTC)
 
   # Create the graphic object ----
   if (createGraphic) {
@@ -255,6 +310,7 @@ bridgeHand <- function(handNumber = "auto", seat = FALSE, createGraphic = TRUE, 
     dealer = dealer, # Dealer
     graphic = hand_graphic, # Hand graphic
     handPoints = points[, c("Hand", "HC")], # Hand points
-    handShapes = handShapes
-  )) # Hand shapes
+    handShapes = handShapes, # Hand shape
+    vuln = vuln # Vulnerability
+  ))
 }
