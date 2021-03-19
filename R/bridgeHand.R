@@ -17,7 +17,7 @@
 #' @param handNumber An integer for generating a hand, or "auto" to use a random number generator
 #' @param seat If not false, makes the specified seat South and dealer, so all bidding starts with South and the specified hand type
 #' @param createGraphic Whether the graphic should be created
-#' @param LTC Whether to include losing trick count - FALSE for none, "original" or "new" for schemas
+#' @param LTC Whether to include losing trick count - FALSE for none, "original" or "new" for schema
 #' @param ... Other parameters used in  hand evaluation
 #'
 #' @examples
@@ -25,7 +25,7 @@
 #' hand <- bridgeHand()
 #'
 #' # Produce a bridge hand '500' ensuring South as dealer
-#' hand500 <- bridgeHand(handNumber = "500", seat = "S") # Seat can be any compass point
+#' hand500 <- bridgeHand(handNumber = 500, seat = "S") # Seat can be any compass point
 #'
 #' @export
 
@@ -262,13 +262,13 @@ bridgeHand <- function(handNumber = "auto", seat = FALSE, createGraphic = TRUE, 
         # https://en.wikipedia.org/wiki/Losing-Trick_Count#Refinements
         if(LTCSchema == "original") {
           temp_ltc <- 0 +
-            stringr::str_count(suit_shape, "Void|A  |AK |AKQ") * 0 + # For completness
+            stringr::str_count(suit_shape, "Void|A  |AK |AKQ") * 0 + # For completeness
             stringr::str_count(suit_shape, "AQ |Ax |AKx|AQx|K  |KQ |Kx |KQx|Q  |x  ") * 1 +
             stringr::str_count(suit_shape, "Axx|Kxx|Qx |Qxx|xx ") * 2 +
             stringr::str_count(suit_shape, "xxx") * 3
         } else if(LTCSchema == "new") {
           temp_ltc <- 0 +
-            stringr::str_count(suit_shape, "Void|A  |AK |AKQ") * 0 + # For completness
+            stringr::str_count(suit_shape, "Void|A  |AK |AKQ") * 0 + # For completeness
             stringr::str_count(suit_shape, "AKx") * 0.5 +
             stringr::str_count(suit_shape, "AQx|Ax |AQ ") * 1 +
             stringr::str_count(suit_shape, "K  |Q  |x  |Axx|KQx|KQ |Kx ") * 1.5 +
@@ -287,7 +287,7 @@ bridgeHand <- function(handNumber = "auto", seat = FALSE, createGraphic = TRUE, 
 
   # Rename LTC column in points
   points <- points %>%
-    dplyr::rename_with(~ glue::glue("LTC ({LTCSchema})"), LTC)
+    dplyr::rename_with(~ glue::glue("LTC ({stringr::str_to_title(LTCSchema)})"), LTC)
 
   # Create the graphic object ----
   if (createGraphic) {

@@ -11,12 +11,7 @@
 #' @import ggplot2
 #' @import patchwork
 #' @importFrom grDevices cairo_pdf
-#' @importFrom ggedit remove_geom
 #' @importFrom magrittr %>%
-#' @importFrom pdftools pdf_combine
-#' @importFrom stringr str_count str_detect
-#' @importFrom scales percent
-
 
 .onLoad <- function(libname, pkgname) {
   # Set global variables for non-standard evaluation - Prevents warnings when compiling

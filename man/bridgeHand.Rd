@@ -19,7 +19,7 @@ bridgeHand(
 
 \item{createGraphic}{Whether the graphic should be created}
 
-\item{LTC}{Whether to include losing trick count - FALSE for none, "original" or "new" for schemas}
+\item{LTC}{Whether to include losing trick count - FALSE for none, "original" or "new" for schema}
 
 \item{...}{Other parameters used in  hand evaluation}
 }
@@ -44,6 +44,6 @@ To change the hand evaluation pass high card values (HCValues) and shape values 
 hand <- bridgeHand()
 
 # Produce a bridge hand '500' ensuring South as dealer
-hand500 <- bridgeHand(handNumber = "500", seat = "S") # Seat can be any compass point
+hand500 <- bridgeHand(handNumber = 500, seat = "S") # Seat can be any compass point
 
 }

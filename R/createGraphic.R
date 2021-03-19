@@ -60,9 +60,6 @@ createGraphic <- function(handNo, handN, handE, handS, handW, dealer, vuln, poin
   # Create central compass rose
   compass <- ggplot() +
     geom_rect(aes(xmin = -0.3, xmax = 0.3, ymin = -0.3, ymax = 0.3), fill = "white") +
-    # For square box around dealer
-    # geom_rect(aes(xmin = dealerPos[1]*0.25-0.06, xmax = dealerPos[1]*0.25+0.06, ymin = dealerPos[2]*0.25-0.06, ymax = dealerPos[2]*0.25+0.06),
-    #                                   colour = "darkgrey", fill = "steelblue", alpha = 0.4) +
     geom_point(aes(x = dealerPos[1] * 0.25, y = dealerPos[2] * 0.25),
       size = 6, pch = 21, stroke = 1.5,
       colour = "steelblue", fill = "white", alpha = 0.8
@@ -82,7 +79,7 @@ createGraphic <- function(handNo, handN, handE, handS, handW, dealer, vuln, poin
     theme_void() +
     theme(aspect.ratio = 1)
 
-  # Change columns names for suits into suit shapes
+  # Change column names into suit shapes
   colnames(handN) <- c("\u2660", "\u2665", "\u2666", "\u2663")
   colnames(handE) <- c("\u2660", "\u2665", "\u2666", "\u2663")
   colnames(handS) <- c("\u2660", "\u2665", "\u2666", "\u2663")
@@ -153,6 +150,14 @@ createGraphic <- function(handNo, handN, handE, handS, handW, dealer, vuln, poin
     grob_W, compass, grob_E,
     grob_points, grob_S, grob_ltc
   )
+
+  # TODO Change from cowplot to patchwork to remove dependency
+  # Found manual manipulation of grobs in printHands alluded me
+    # hand_graphic <- wrap_elements(panel = grob_header) +
+    #   grob_N + plot_spacer() +
+    #   grob_W + compass + grob_E +
+    #   grob_points + grob_S + grob_ltc
+
 
   invisible(hand_graphic)
 }

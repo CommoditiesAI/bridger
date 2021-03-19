@@ -18,14 +18,14 @@
 #'
 #' @examples
 #' # Produce 1 hand showing only one seat
-#' printHands(handType = "any", num = 1, output = "ALL")
+#' printHands(handType = "any", num = 1, output = "all")
 #'
 #' \dontrun{
 #' # Produce a page of 6 South hands likely to open with a 3-level preempt
 #'     printHands(handType = "preempt3", num = 6, output = "S")
 #'
 #' # Produce specified hands
-#'     printHands(ids = c(500, 501, 502), seats = c("E", "W", "S"))
+#'     printHands(ids = c(500, 501, 502), seats = c("E", "W", "S",  output = "F"))
 #' }
 #'
 #' @export
@@ -43,14 +43,13 @@ printHands <- function(ids = FALSE, seats = FALSE, handType = "any", num = 12, o
     }
 
     check_output <- output
-    for(i in c("a", "f", "n", "e", "s", "w")) {
+    for(i in c("f", "n", "e", "s", "w")) {
       check_output <- stringr::str_replace(check_output, i, "")
     }
 
     if(!check_output == "") {
       stop(glue::glue("Unknown output type '{check_output}' requested"))
     }
-
 
   # Check bridger directory exists, if requested to save there
   if(!is.null(saveOutputDir)) {

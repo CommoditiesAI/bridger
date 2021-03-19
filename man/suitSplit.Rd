@@ -9,7 +9,7 @@ suitSplit(missingCards = 5, cards_W = 13, cards_E = 13)
 \arguments{
 \item{missingCards}{The number of cards held by the two hands}
 
-\item{cards_W}{Cards in West hands, e.g. If bidding indicates another 5 card suit, for example by overcalling, then reduce by cards_W by 5}
+\item{cards_W}{Cards in West hands}
 
 \item{cards_E}{Cards in East hands}
 }
@@ -17,11 +17,13 @@ suitSplit(missingCards = 5, cards_W = 13, cards_E = 13)
 Tibble of probabilities
 }
 \description{
-The probabilities of how a number of cards  will split between two hands, given a number of unknown cards in each hand.  Unknown hands
-  are assumed to be West and East.
-}
-\note{
-If the unknown cards in both hands are the same, then symmetrical probabilities will be returned.
+Provides the probabilities with whih a number of cards  will split between two hands, given a number of unknown cards in each hand.
+  Unknown hands are assumed to be West and East.
+
+  If there is no information to indicate different numbers of unknown cards in both hands, then symmetrical probabilities will be returned.
+  However, if one hand is expected to have a different number of cards to the other, then these can be specified.  For example, if during the
+  bidding East overcalled in spades, indicating a 5 card suit, then when looking at hearts, East has fewer cards.  While the number of assumed
+  cards in West's hand is 13 ('cards_W = 13'), the assumed cards in East should be reduced to 8 ('cards_E = 8')
 }
 \examples{
 suitSplit(missingCards = 6, cards_W = 13, cards_E = 8)
