@@ -41,13 +41,12 @@ Produce a graphic of hands as a hand-out.  Each page can hold up to 6 hands.
 \examples{
 # Produce 1 hand showing only one seat
 printHands(handType = "any", num = 1, output = "all")
-
 \dontrun{
 # Produce a page of 6 South hands likely to open with a 3-level preempt
-    printHands(handType = "preempt3", num = 6, output = "S")
+printHands(handType = "preempt3", num = 6, output = "S")
 
 # Produce specified hands
-    printHands(ids = c(500, 501, 502), seats = c("E", "W", "S",  output = "F"))
+printHands(ids = c(500, 501, 502), seats = c("E", "W", "S", output = "F"))
 }
 
 }

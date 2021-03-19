@@ -45,5 +45,4 @@ hand <- bridgeHand()
 
 # Produce a bridge hand '500' ensuring South as dealer
 hand500 <- bridgeHand(handNumber = 500, seat = "S") # Seat can be any compass point
-
 }

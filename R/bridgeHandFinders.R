@@ -56,8 +56,8 @@ find_1major <- function(HC_low = 15, HC_high = 19, cardLen_min = 4, canape = FAL
       # Test hand for conditions ~ Need 15 points to avoid 1NT
       result <- case_when(
         HC < HC_low | HC > HC_high ~ FALSE, # Test for points
-        all(shape[1,] < cardLen_min, shape[2,] < cardLen_min) ~ FALSE, # Both majors are too short
-        all(shape[3,] < (cardLen_min + 1 + canape*1), shape[4,] < (cardLen_min + 1 + canape*1)) ~ FALSE, # Minor suit, won't be bid first
+        all(shape[1, ] < cardLen_min, shape[2, ] < cardLen_min) ~ FALSE, # Both majors are too short
+        all(shape[3, ] < (cardLen_min + 1 + canape * 1), shape[4, ] < (cardLen_min + 1 + canape * 1)) ~ FALSE, # Minor suit, won't be bid first
 
         TRUE ~ TRUE
       )
@@ -69,9 +69,9 @@ find_1major <- function(HC_low = 15, HC_high = 19, cardLen_min = 4, canape = FAL
 
       # Test hand for conditions ~ Need 12-14 if 5 card suit
       result <- case_when(
-        HC < HC_low-3 ~ FALSE, # Test for points
-        all(shape[1,] < (cardLen_min+1), shape[2,] < (cardLen_min+1)) ~ FALSE, # Both majors are too short
-        any(shape[3,] >= (cardLen_min + 1 + canape*1), shape[4,] >= (cardLen_min + 1 + canape*1)) ~ FALSE, # Minor suit, won't be bid first
+        HC < HC_low - 3 ~ FALSE, # Test for points
+        all(shape[1, ] < (cardLen_min + 1), shape[2, ] < (cardLen_min + 1)) ~ FALSE, # Both majors are too short
+        any(shape[3, ] >= (cardLen_min + 1 + canape * 1), shape[4, ] >= (cardLen_min + 1 + canape * 1)) ~ FALSE, # Minor suit, won't be bid first
 
         TRUE ~ TRUE
       )
@@ -80,7 +80,6 @@ find_1major <- function(HC_low = 15, HC_high = 19, cardLen_min = 4, canape = FAL
       if (result) {
         return(invisible(list(id = testHand$id, seat = c("N", "E", "S", "W")[seat])))
       }
-
     }
   }
 
@@ -99,7 +98,6 @@ find_1major <- function(HC_low = 15, HC_high = 19, cardLen_min = 4, canape = FAL
 #' @param cardLen_high The maximum length of a suit
 
 find_weakNT <- function(HC_low = 12, HC_high = 14, cardLen_low = 2, cardLen_high = 4) {
-
   repeat {
     testHand <- bridgeHand(createGraphic = FALSE)
 
@@ -144,7 +142,6 @@ find_weakNT <- function(HC_low = 12, HC_high = 14, cardLen_low = 2, cardLen_high
 #' @param cardLen_high The maximum length of a suit
 
 find_strongNT <- function(HC_low = 15, HC_high = 17, cardLen_low = 2, cardLen_high = 5) {
-
   repeat{
     testHand <- bridgeHand(createGraphic = FALSE)
 
@@ -185,7 +182,6 @@ find_strongNT <- function(HC_low = 15, HC_high = 17, cardLen_low = 2, cardLen_hi
 #' @param cardLen_high The maximum length of a suit
 
 find_strong <- function(HC_low = 19, HC_high = 35, cardLen_low = 1, cardLen_high = 5) {
-
   repeat{
     testHand <- bridgeHand(createGraphic = FALSE)
 
@@ -223,7 +219,6 @@ find_strong <- function(HC_low = 19, HC_high = 35, cardLen_low = 1, cardLen_high
 #' @param cardLen_high The maximum length of a suit
 
 find_4441 <- function(HC_low = 12, HC_high = 35, cardLen_low = 5, cardLen_high = 13) {
-
   repeat{
     testHand <- bridgeHand(createGraphic = FALSE)
 
@@ -260,7 +255,6 @@ find_4441 <- function(HC_low = 12, HC_high = 35, cardLen_low = 5, cardLen_high =
 #' @param cardLen_high The maximum length of a suit
 
 find_2preempt <- function(HC_low = 5, HC_high = 10, cardLen_low = 6, cardLen_high = 7) {
-
   repeat{
     testHand <- bridgeHand(createGraphic = FALSE)
 
@@ -297,7 +291,6 @@ find_2preempt <- function(HC_low = 5, HC_high = 10, cardLen_low = 6, cardLen_hig
 #' @param cardLen_high The maximum length of a suit
 
 find_3preempt <- function(HC_low = 5, HC_high = 10, cardLen_low = 7, cardLen_high = 8) {
-
   repeat{
     testHand <- bridgeHand(createGraphic = FALSE)
 
@@ -317,7 +310,6 @@ find_3preempt <- function(HC_low = 5, HC_high = 10, cardLen_low = 7, cardLen_hig
         return(invisible(list(id = testHand$id, seat = c("N", "E", "S", "W")[seat])))
       }
     }
-
   }
   return("Failure in find_3preempt")
 }

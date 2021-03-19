@@ -49,13 +49,12 @@ Other parameters are also used, but individually assigned in the function.
 \examples{
 # Collect the ids of 2 hands with any shape
 hands <- collectHands(num = 2)
-
 \dontrun{
 # Collect a hand with opening points and a "4441" shape
-    hands <- collectHands(handType = "4441", num = 1)
+hands <- collectHands(handType = "4441", num = 1)
 
 # Collect a NT trump hand, with a point range of 11 to 15
-    hands <- collectHands(handType = "weakNT", num = 1, HC_low = 11, HC_high = 15)
+hands <- collectHands(handType = "weakNT", num = 1, HC_low = 11, HC_high = 15)
 }
 
 }
