@@ -20,3 +20,5 @@ notifications:
       - scjase@gmail.com
     on_success: always # always|never|change, default: change
     on_failure: always # default: always
+=======
+cache: packages
