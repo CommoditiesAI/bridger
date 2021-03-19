@@ -1,6 +1,6 @@
 #' @title suitSplit
 #'
-#' @description Provides the probabilities with whih a number of cards  will split between two hands, given a number of unknown cards in each hand.
+#' @description Provides the probabilities with with a number of cards  will split between two hands, given a number of unknown cards in each hand.
 #'   Unknown hands are assumed to be West and East.
 #'
 #'   If there is no information to indicate different numbers of unknown cards in both hands, then symmetrical probabilities will be returned.
