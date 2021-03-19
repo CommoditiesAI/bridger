@@ -96,11 +96,11 @@ createGraphic <- function(handNo, handN, handE, handS, handW, dealer, vuln, poin
   grob_points <- points %>%
     select(1:4) %>%
     gridExtra::tableGrob(rows = NULL, theme = boxTheme)
-  if(is.na(points[1,5])) {
+  if (is.na(points[1, 5])) {
     grob_ltc <- NULL
   } else {
     grob_ltc <- points %>%
-      select(c(1,5)) %>%
+      select(c(1, 5)) %>%
       gridExtra::tableGrob(rows = NULL, theme = boxTheme)
   }
 
@@ -153,10 +153,10 @@ createGraphic <- function(handNo, handN, handE, handS, handW, dealer, vuln, poin
 
   # TODO Change from cowplot to patchwork to remove dependency
   # Found manual manipulation of grobs in printHands alluded me
-    # hand_graphic <- wrap_elements(panel = grob_header) +
-    #   grob_N + plot_spacer() +
-    #   grob_W + compass + grob_E +
-    #   grob_points + grob_S + grob_ltc
+  # hand_graphic <- wrap_elements(panel = grob_header) +
+  #   grob_N + plot_spacer() +
+  #   grob_W + compass + grob_E +
+  #   grob_points + grob_S + grob_ltc
 
 
   invisible(hand_graphic)

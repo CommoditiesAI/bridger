@@ -38,13 +38,12 @@
 #' @examples
 #' # Collect the ids of 2 hands with any shape
 #' hands <- collectHands(num = 2)
-#'
 #' \dontrun{
 #' # Collect a hand with opening points and a "4441" shape
-#'     hands <- collectHands(handType = "4441", num = 1)
+#' hands <- collectHands(handType = "4441", num = 1)
 #'
 #' # Collect a NT trump hand, with a point range of 11 to 15
-#'     hands <- collectHands(handType = "weakNT", num = 1, HC_low = 11, HC_high = 15)
+#' hands <- collectHands(handType = "weakNT", num = 1, HC_low = 11, HC_high = 15)
 #' }
 #'
 #' @export
@@ -67,7 +66,7 @@ collectHands <- function(handType = "any", num = 6, ...) {
 
   # Which type of hand is waned
   findCall <- case_when(
-  # Simple hand types
+    # Simple hand types
     handType %in% c("any") ~ "find_any",
     handType %in% c("weakNT", "weaknt", "weakbalanced") ~ "find_weakNT",
     handType %in% c("1major", "major1") ~ "find_1major",
@@ -77,17 +76,17 @@ collectHands <- function(handType = "any", num = 6, ...) {
     handType %in% c("2preempt", "weak2", "preempt2") ~ "find_2preempt",
     handType %in% c("3preempt", "weak3", "preempt3") ~ "find_3preempt",
 
-  # Composite hand types
+    # Composite hand types
     handType %in% c("weak1NTdouble", "weak1NTx", "double-after-NT", "1NT_LHOdouble") ~ "find_weak1NT_LHOx",
     handType %in% c("weak1NTbid", "bid-after-NT", "1NT_LHObid") ~ "find_weak1NT_LHObid",
     handType %in% c("weak1NTRHObid", "RHObid-after-NT", "1NT_RHObid") ~ "find_weak1NT_RHObid",
     handType %in% c("jacoby2NT") ~ "find_1major_jacoby2NT",
 
-  # Unknown hand type
+    # Unknown hand type
     handType == TRUE ~ "unknown"
   )
 
-  if(findCall == "unknown") {
+  if (findCall == "unknown") {
     stop(glue::glue("Unknown handtype - '{handType}' - given"))
   }
 

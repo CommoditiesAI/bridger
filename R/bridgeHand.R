@@ -26,13 +26,12 @@
 #'
 #' # Produce a bridge hand '500' ensuring South as dealer
 #' hand500 <- bridgeHand(handNumber = 500, seat = "S") # Seat can be any compass point
-#'
 #' @export
 
 bridgeHand <- function(handNumber = "auto", seat = FALSE, createGraphic = TRUE, LTC = "original", ...) {
 
   # Check for valid handNumber
-  if(handNumber != "auto" & !is.numeric(handNumber)) {
+  if (handNumber != "auto" & !is.numeric(handNumber)) {
     stop("Only numeric seeds allowed for handNumbers")
   }
 
@@ -70,7 +69,7 @@ bridgeHand <- function(handNumber = "auto", seat = FALSE, createGraphic = TRUE, 
 
   # Set seed - Use given seed or choose a random one ----
   if (handNumber != "auto") {
-      handNo <- handNumber
+    handNo <- handNumber
   } else {
     handNo <- round(runif(1) * 10000000, 0)
   }
@@ -243,7 +242,7 @@ bridgeHand <- function(handNumber = "auto", seat = FALSE, createGraphic = TRUE, 
     relocate(LTC, .after = Total)
 
   # Calculate losing trick count ---
-  if(LTCSchema != FALSE) {
+  if (LTCSchema != FALSE) {
     for (i in compassPoints) {
       current_hand <- get(glue::glue("hand{i}")) %>%
         slice(1:3) %>%
@@ -253,20 +252,21 @@ bridgeHand <- function(handNumber = "auto", seat = FALSE, createGraphic = TRUE, 
       # Start with 0 or 1 if there is no ace in the suit
       ltc <- ifelse(any(stringr::str_detect(unname(unlist(current_hand)), "A")), 0, 1)
 
-      for(j in suits) {
+      for (j in suits) {
         suit_shape <- select(current_hand, all_of(j)) %>%
-          unname() %>% unlist() %>%
+          unname() %>%
+          unlist() %>%
           glue::glue_collapse()
 
         # Alternative counting and adjustments possible
         # https://en.wikipedia.org/wiki/Losing-Trick_Count#Refinements
-        if(LTCSchema == "original") {
+        if (LTCSchema == "original") {
           temp_ltc <- 0 +
             stringr::str_count(suit_shape, "Void|A  |AK |AKQ") * 0 + # For completeness
             stringr::str_count(suit_shape, "AQ |Ax |AKx|AQx|K  |KQ |Kx |KQx|Q  |x  ") * 1 +
             stringr::str_count(suit_shape, "Axx|Kxx|Qx |Qxx|xx ") * 2 +
             stringr::str_count(suit_shape, "xxx") * 3
-        } else if(LTCSchema == "new") {
+        } else if (LTCSchema == "new") {
           temp_ltc <- 0 +
             stringr::str_count(suit_shape, "Void|A  |AK |AKQ") * 0 + # For completeness
             stringr::str_count(suit_shape, "AKx") * 0.5 +
@@ -276,8 +276,8 @@ bridgeHand <- function(handNumber = "auto", seat = FALSE, createGraphic = TRUE, 
             stringr::str_count(suit_shape, "Qx |Qxx|xx ") * 2.5 +
             stringr::str_count(suit_shape, "xxx") * 3
         }
-      ltc <- ltc + ceiling(temp_ltc) # Rounded up and add to previous
-    }
+        ltc <- ltc + ceiling(temp_ltc) # Rounded up and add to previous
+      }
 
       points[points$Hand == i, "LTC"] <- ltc
     }
