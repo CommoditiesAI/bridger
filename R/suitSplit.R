@@ -21,7 +21,7 @@
 
 suitSplit <- function(missingCards = 5, cards_W = 13, cards_E = 13) {
 
-  outTable <- tibble::tibble("Cards held by West" = 0:missingCards, "Cards held by East" = missingCards:0, Probability = 0)
+  outTable <- tibble("Cards held by West" = 0:missingCards, "Cards held by East" = missingCards:0, Probability = 0)
 
   for(i in outTable$"Cards held by West") {
     unknown_W = i
@@ -30,14 +30,14 @@ suitSplit <- function(missingCards = 5, cards_W = 13, cards_E = 13) {
     temp <- factorial(unknown_W + unknown_E)/(factorial(unknown_W)*factorial(unknown_E)) *
       (factorial(cards_W)*factorial(cards_E) * factorial(cards_W + cards_E - unknown_W - unknown_E)) /
       (factorial(cards_W + cards_E)*factorial(cards_W-unknown_W)*factorial(cards_E-unknown_E)) *
-      ifelse(cards_W == cards_E, (2-abs(unknown_W == unknown_E)), 1) # Adding this and the slice function for symmetrical hands
+      ifelse(cards_W == cards_E, (2-abs(unknown_W == unknown_E)), 1) # This line and the slice function for symmetrical hands
 
     outTable[i+1, "Probability"] <- round(temp,2)
 
   }
 
   if(cards_W == cards_E) {
-    outTable <- dplyr::slice(outTable, 0:ceiling(nrow(outTable)/2))
+    outTable <- slice(outTable, 0:ceiling(nrow(outTable)/2))
     colnames(outTable) <- c("Cards in one hand", "Cards in other hand", "Probability")
   }
 

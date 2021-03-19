@@ -24,7 +24,7 @@ createGraphic <- function(handNo, handN, handE, handS, handW, dealer, vuln, poin
     base_size = 8,
     colhead = list(fg_params = list(col = "darkblue", fontface = "bold"), hjust = 0, x = 0),
     rowhead = list(fg_params = list(col = c("black", "red", "red", "black"), fontface = "bold"), hjust = 0, x = 0),
-    padding = ggplot2::unit(c(2, 2), "mm"),
+    padding = unit(c(2, 2), "mm"),
     parse = TRUE
   )
 
@@ -36,18 +36,18 @@ createGraphic <- function(handNo, handN, handE, handS, handW, dealer, vuln, poin
     base_size = 6,
     colhead = list(fg_params = list(col = "darkblue", fontface = "bold"), hjust = 0, x = 0),
     rowhead = list(fg_params = list(col = c("black", "red", "red", "black"), fontface = "bold"), hjust = 0, x = 0),
-    padding = ggplot2::unit(c(2, 2), "mm"),
+    padding = unit(c(2, 2), "mm"),
     parse = TRUE
   )
 
-  dealerPos <- dplyr::case_when(
+  dealerPos <- case_when(
     dealer == "N" ~ c(dealerX = 0, dealerY = 1),
     dealer == "E" ~ c(dealerX = 1, dealerY = 0),
     dealer == "S" ~ c(dealerX = 0, dealerY = -1),
     dealer == "W" ~ c(dealerX = -1, dealerY = 0)
   )
 
-  header <- tibble::tibble(
+  header <- tibble(
     "Hand ID" = sub("\\s+$", "", gsub("(.{3})", "\\1 ", handNo)),
     " " = " ",
     "Dealer" = dealer,
@@ -55,7 +55,7 @@ createGraphic <- function(handNo, handN, handE, handS, handW, dealer, vuln, poin
   )
 
   header <- as_tibble(cbind(" " = names(header), t(header)), .name_repair = "minimal") %>%
-    dplyr::rename(Value = 2)
+    rename(Value = 2)
 
   # Create central compass rose
   compass <- ggplot() +

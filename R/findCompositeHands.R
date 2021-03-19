@@ -26,7 +26,7 @@ repeat {
     shape_lho <- weakNT$handShapes[, 4]
 
 
-    result <- dplyr::case_when(
+    result <- case_when(
       HC_lho < pointsForDouble ~ FALSE, # Test for points to double
       any(shape_lho < 2) | any(shape_lho > 5) ~ FALSE, # Test for flat hand
       TRUE ~ TRUE
@@ -66,7 +66,7 @@ find_weak1NT_LHObid <- function(HC_low = 7, cardLen_low = 6) {
     HC_lho <- weakNT$handPoints[4, 2]
     shape_lho <- weakNT$handShapes[, 4]
 
-    result <- dplyr::case_when(
+    result <- case_when(
       HC_lho < HC_low ~ FALSE, # Test for points to bid
       # Test for one of 1) Long suit, e.g. 6, 2) two medium long suits, e.g. 5 or 3) "45" in the majors
       any(cardLen_low <= shape_lho)  ~ TRUE,
@@ -110,7 +110,7 @@ find_weak1NT_RHObid <- function(HC_low = 7, cardLen_low = 6) {
     HC_lho <- weakNT$handPoints[4, 2]
     shape_lho <- weakNT$handShapes[, 4]
 
-    result <- dplyr::case_when(
+    result <- case_when(
       HC_lho < HC_low ~ FALSE, # Test for points to bid
       # Test for one of 1) Long suit, e.g. 6, 2) two medium long suits, e.g. 5 or 3) "45" in the majors
       any(cardLen_low <= shape_lho)  ~ TRUE,
@@ -128,7 +128,7 @@ find_weak1NT_RHObid <- function(HC_low = 7, cardLen_low = 6) {
     HC_part <- weakNT$handPoints[1, 2]
     shape_part <- weakNT$handShapes[, 1]
 
-    result <- dplyr::case_when(
+    result <- case_when(
       HC_part >= 11 ~ TRUE, # Test for points to bid again
       # Test for one of 1) Long suit, e.g. 6, 2) two medium long suits, e.g. 5 or 3) "45" in the majors
       any(shape_part[c(1,2),] >= 5) ~ TRUE, # 5 card major
@@ -145,7 +145,7 @@ find_weak1NT_RHObid <- function(HC_low = 7, cardLen_low = 6) {
     HC_rho <- weakNT$handPoints[2, 2]
     shape_rho <- weakNT$handShapes[, 2]
 
-    result <- dplyr::case_when(
+    result <- case_when(
       HC_rho < HC_low ~ FALSE, # Test for points to bid
       # Test for one of 1) Long suit, e.g. 6, 2) two medium long suits, e.g. 5 or 3) "45" in the majors
       any(cardLen_low <= shape_rho)  ~ TRUE,
@@ -192,7 +192,7 @@ find_1major_jacoby2NT <- function(HC_low = 13, cardLen_low = 4) {
     # Which major was selected - 1 = Spades, 2 = Hearts
     suitbid <- as.numeric(ifelse(firstHand$handShapes[1, 3] >= firstHand$handShapes[2, 3], 1, 2))
 
-    result <- dplyr::case_when(
+    result <- case_when(
       HC_part < HC_low ~ FALSE, # Test for points to double
       shape_part[suitbid,] < cardLen_low ~ FALSE, # Test length in bid suit
       # Check that partner's spade suit isn't longer than hearts, if hearts is the opening bid

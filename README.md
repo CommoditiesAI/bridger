@@ -18,6 +18,6 @@ To generate a page of hands likely to open a pre-emptive at the 3-level, showing
 
     printHands(handType = "preempt3", num = 6, output = "S")
 
-Installation from CRAN
+Installation from CRAN:
 
     install.packages("bridger")

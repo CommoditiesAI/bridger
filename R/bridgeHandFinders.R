@@ -14,7 +14,7 @@ find_any <- function(HC_low = 12) {
       HC <- testHand$handPoints[seat, 2]
 
       # Test hand for conditions
-      result <- dplyr::case_when(
+      result <- case_when(
         HC < HC_low ~ FALSE, # Test for points
         TRUE ~ TRUE
       )
@@ -54,7 +54,7 @@ find_1major <- function(HC_low = 15, HC_high = 19, cardLen_min = 4, canape = FAL
       shape <- testHand$handShapes[, seat]
 
       # Test hand for conditions ~ Need 15 points to avoid 1NT
-      result <- dplyr::case_when(
+      result <- case_when(
         HC < HC_low | HC > HC_high ~ FALSE, # Test for points
         all(shape[1,] < cardLen_min, shape[2,] < cardLen_min) ~ FALSE, # Both majors are too short
         all(shape[3,] < (cardLen_min + 1 + canape*1), shape[4,] < (cardLen_min + 1 + canape*1)) ~ FALSE, # Minor suit, won't be bid first
@@ -68,7 +68,7 @@ find_1major <- function(HC_low = 15, HC_high = 19, cardLen_min = 4, canape = FAL
       }
 
       # Test hand for conditions ~ Need 12-14 if 5 card suit
-      result <- dplyr::case_when(
+      result <- case_when(
         HC < HC_low-3 ~ FALSE, # Test for points
         all(shape[1,] < (cardLen_min+1), shape[2,] < (cardLen_min+1)) ~ FALSE, # Both majors are too short
         any(shape[3,] >= (cardLen_min + 1 + canape*1), shape[4,] >= (cardLen_min + 1 + canape*1)) ~ FALSE, # Minor suit, won't be bid first
@@ -111,7 +111,7 @@ find_weakNT <- function(HC_low = 12, HC_high = 14, cardLen_low = 2, cardLen_high
       # Don't pass points by hand & suit, so can't extract data for now
 
       # Test hand for conditions
-      result <- dplyr::case_when(
+      result <- case_when(
         HC < HC_low ~ FALSE, # Test for points
         HC > HC_high ~ FALSE, # Test for points
         any(shape < cardLen_low) ~ FALSE, # Test for length
@@ -153,7 +153,7 @@ find_strongNT <- function(HC_low = 15, HC_high = 17, cardLen_low = 2, cardLen_hi
       shape <- testHand$handShapes[, seat]
 
       # Test hand for conditions
-      result <- dplyr::case_when(
+      result <- case_when(
         HC < HC_low ~ FALSE, # Test for points
         HC > HC_high ~ FALSE, # Test for points
         any(shape < cardLen_low) ~ FALSE, # Test for length
@@ -194,7 +194,7 @@ find_strong <- function(HC_low = 19, HC_high = 35, cardLen_low = 1, cardLen_high
       shape <- testHand$handShapes[, seat]
 
       # Test hand for conditions
-      result <- dplyr::case_when(
+      result <- case_when(
         HC < HC_low | HC > HC_high ~ FALSE, # Test for points
         any(shape <= cardLen_low) | any(shape >= cardLen_high) ~ FALSE, # Test for having a long or short suit
         TRUE ~ TRUE
@@ -232,7 +232,7 @@ find_4441 <- function(HC_low = 12, HC_high = 35, cardLen_low = 5, cardLen_high =
       shape <- testHand$handShapes[, seat]
 
       # Test hand for conditions
-      result <- dplyr::case_when(
+      result <- case_when(
         HC < HC_low | HC > HC_high ~ FALSE, # Test for points
         sum(shape == 4) != 3 ~ FALSE, # Test for length
         TRUE ~ TRUE
@@ -269,7 +269,7 @@ find_2preempt <- function(HC_low = 5, HC_high = 10, cardLen_low = 6, cardLen_hig
       shape <- testHand$handShapes[, seat]
 
       # Test hand for conditions
-      result <- dplyr::case_when(
+      result <- case_when(
         HC < HC_low | HC > HC_high ~ FALSE, # Test for points
         sum(shape[1:2, ] == cardLen_low) != 1 | sum(shape == cardLen_high) >= 1 ~ FALSE, # Test for only 1 two-card suit
         TRUE ~ TRUE
@@ -306,7 +306,7 @@ find_3preempt <- function(HC_low = 5, HC_high = 10, cardLen_low = 7, cardLen_hig
       shape <- testHand$handShapes[, seat]
 
       # Test hand for conditions
-      result <- dplyr::case_when(
+      result <- case_when(
         HC < HC_low | HC > HC_high ~ FALSE, # Test for points
         sum(shape == cardLen_low) < 1 ~ FALSE, # Test for only 1 two-card suit
         TRUE ~ TRUE
