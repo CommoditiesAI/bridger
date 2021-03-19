@@ -28,4 +28,3 @@ vignettes/*.pdf
 .Renviron
 .Rbuildignore
 .github
-.travis.yml
