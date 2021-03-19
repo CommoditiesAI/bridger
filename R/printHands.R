@@ -5,21 +5,22 @@
 #'   Pages of full hands, or only one set of hands can be selected.  "ALL" is equivalent to FULL and separate pages of
 #'   each of the four positions.  "N", "E", "S" or "W" will produce only show the points and hands for those positions.
 #'
-#'   The output will be a PDF for the selected hand sets.  These will be saved to the 'c:/temp/bridger/' directory, if saveOutput
-#'   is set to TRUE, or to temporary, notified files if set to false.
+#'   The output will be a PDF for the selected hand sets.  The default is to save them to a default directory, but a directory can be specified
+#'   in saveOutput in which the PDF will be saved.
 #'
 #' @param ids The ids of hands to be generated
 #' @param seats The seats of the hands in ids, i.e. the seat which gives the requested conditions
 #' @param handType The type of hand required, default is 'any'.  Alternatives include, '4441', 'strong', ...
 #' @param num The number of hands wanted
-#' @param output Character code of required outputs, "N", "E", "S", "W" for the respective hands, "F" for the full hand NB "ALL" equivalent to "FNEWS"
-#' @param saveOutputDir The location for saving the output pages, Set to NULL to save to a temporary directory
+#' @param output Character code of required seats, "N", "E", "S", "W" and "F" for the full hand NB "ALL" equivalent to "FNEWS"
+#' @param saveOutputDir Default "temp" to save to temporary directory, or specify a directory, e.g. "c:/temp/bridger"
 #' @param ... Other variables that may be passed when selecting compliant hands
 #'
 #' @examples
-#' # Produce 1 hand showing only one seat
-#' printHands(handType = "any", num = 1, output = "all")
 #' \dontrun{
+#' # Produce a hand showing all seats and save them to c:/temp/bridger
+#' printHands(handType = "any", num = 1, output = "all", saveOutput = "c:/temp/bridger")
+#'
 #' # Produce a page of 6 South hands likely to open with a 3-level preempt
 #' printHands(handType = "preempt3", num = 6, output = "S")
 #'
@@ -29,7 +30,7 @@
 #'
 #' @export
 
-printHands <- function(ids = FALSE, seats = FALSE, handType = "any", num = 12, output = "F", saveOutputDir = "c:/temp/bridger/", ...) {
+printHands <- function(ids = FALSE, seats = FALSE, handType = "any", num = 12, output = "F", saveOutputDir = "temp", ...) {
 
   # Add a timer
   startTme <- Sys.time()
@@ -51,14 +52,14 @@ printHands <- function(ids = FALSE, seats = FALSE, handType = "any", num = 12, o
   }
 
   # Check bridger directory exists, if requested to save there
-  if (!is.null(saveOutputDir)) {
+  if (saveOutputDir != FALSE) {
     if (!dir.exists(saveOutputDir)) {
       print(glue::glue("Creating directory '{saveOutputDir}' to save output sheets"))
       dir.create(saveOutputDir, recursive = TRUE)
     }
   } else {
     saveOutputDir <- tempdir(check = TRUE)
-    print(glue::glue("Saving output to temporary directory '{saveOutputDir}'"))
+    message(glue::glue("Saving output to temporary directory '{saveOutputDir}\\'"))
   }
 
   # Build graphic function
@@ -156,8 +157,8 @@ printHands <- function(ids = FALSE, seats = FALSE, handType = "any", num = 12, o
     }
 
     # Combine temporary pages into final output
-    pdftools::pdf_combine(page_list, glue::glue("{saveOutputDir}/bridgeHands_{handType}_full.pdf"))
-    message(glue::glue("Full hands saved to - {saveOutputDir}/bridgeHands_{handType}_full.pdf"))
+    pdftools::pdf_combine(page_list, glue::glue("{saveOutputDir}\\bridgeHands_{handType}_full.pdf"))
+    message(glue::glue("Full hands saved to - {saveOutputDir}\\bridgeHands_{handType}_full.pdf"))
 
     # Clean up temp pages
     unlink(page_list)
@@ -208,8 +209,8 @@ printHands <- function(ids = FALSE, seats = FALSE, handType = "any", num = 12, o
     }
 
     # Combine temporary pages into final output
-    pdftools::pdf_combine(page_list, glue::glue("{saveOutputDir}/bridgeHands_{handType}_south.pdf"))
-    message(glue::glue("South hands saved to - {saveOutputDir}/bridgeHands_{handType}_south.pdf"))
+    pdftools::pdf_combine(page_list, glue::glue("{saveOutputDir}\\bridgeHands_{handType}_south.pdf"))
+    message(glue::glue("South hands saved to - {saveOutputDir}\\bridgeHands_{handType}_south.pdf"))
 
 
     # Remove temp pages
@@ -266,8 +267,8 @@ printHands <- function(ids = FALSE, seats = FALSE, handType = "any", num = 12, o
     }
 
     # Combine temporary pages into final output
-    pdftools::pdf_combine(page_list, glue::glue("{saveOutputDir}/bridgeHands_{handType}_west.pdf"))
-    message(glue::glue("West hands saved to - {saveOutputDir}/bridgeHands_{handType}_west.pdf"))
+    pdftools::pdf_combine(page_list, glue::glue("{saveOutputDir}\\bridgeHands_{handType}_west.pdf"))
+    message(glue::glue("West hands saved to - {saveOutputDir}\\bridgeHands_{handType}_west.pdf"))
 
     # Remove temp pages
     unlink(page_list)
@@ -323,8 +324,8 @@ printHands <- function(ids = FALSE, seats = FALSE, handType = "any", num = 12, o
     }
 
     # Combine temporary pages into final output
-    pdftools::pdf_combine(page_list, glue::glue("{saveOutputDir}/bridgeHands_{handType}_north.pdf"))
-    message(glue::glue("North hands saved to - {saveOutputDir}/bridgeHands_{handType}_north.pdf"))
+    pdftools::pdf_combine(page_list, glue::glue("{saveOutputDir}\\bridgeHands_{handType}_north.pdf"))
+    message(glue::glue("North hands saved to - {saveOutputDir}\\bridgeHands_{handType}_north.pdf"))
 
     # Remove temp pages
     unlink(page_list)
@@ -380,8 +381,8 @@ printHands <- function(ids = FALSE, seats = FALSE, handType = "any", num = 12, o
     }
 
     # Combine temporary pages into final output
-    pdftools::pdf_combine(page_list, glue::glue("{saveOutputDir}/bridgeHands_{handType}_east.pdf"))
-    message(glue::glue("East hands saved to - {saveOutputDir}/bridgeHands_{handType}_east.pdf"))
+    pdftools::pdf_combine(page_list, glue::glue("{saveOutputDir}\\bridgeHands_{handType}_east.pdf"))
+    message(glue::glue("East hands saved to - {saveOutputDir}\\bridgeHands_{handType}_east.pdf"))
 
     # Remove temp pages
     unlink(page_list)

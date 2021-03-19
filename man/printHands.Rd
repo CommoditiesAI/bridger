@@ -10,7 +10,7 @@ printHands(
   handType = "any",
   num = 12,
   output = "F",
-  saveOutputDir = "c:/temp/bridger/",
+  saveOutputDir = "temp",
   ...
 )
 }
@@ -23,9 +23,9 @@ printHands(
 
 \item{num}{The number of hands wanted}
 
-\item{output}{Character code of required outputs, "N", "E", "S", "W" for the respective hands, "F" for the full hand NB "ALL" equivalent to "FNEWS"}
+\item{output}{Character code of required seats, "N", "E", "S", "W" and "F" for the full hand NB "ALL" equivalent to "FNEWS"}
 
-\item{saveOutputDir}{The location for saving the output pages, Set to NULL to save to a temporary directory}
+\item{saveOutputDir}{Default "temp" to save to temporary directory, or specify a directory, e.g. "c:/temp/bridger"}
 
 \item{...}{Other variables that may be passed when selecting compliant hands}
 }
@@ -35,13 +35,14 @@ Produce a graphic of hands as a hand-out.  Each page can hold up to 6 hands.
   Pages of full hands, or only one set of hands can be selected.  "ALL" is equivalent to FULL and separate pages of
   each of the four positions.  "N", "E", "S" or "W" will produce only show the points and hands for those positions.
 
-  The output will be a PDF for the selected hand sets.  These will be saved to the 'c:/temp/bridger/' directory, if saveOutput
-  is set to TRUE, or to temporary, notified files if set to false.
+  The output will be a PDF for the selected hand sets.  The default is to save them to a default directory, but a directory can be specified
+  in saveOutput in which the PDF will be saved.
 }
 \examples{
-# Produce 1 hand showing only one seat
-printHands(handType = "any", num = 1, output = "all")
 \dontrun{
+# Produce a hand showing all seats and save them to c:/temp/bridger
+printHands(handType = "any", num = 1, output = "all", saveOutput = "c:/temp/bridger")
+
 # Produce a page of 6 South hands likely to open with a 3-level preempt
 printHands(handType = "preempt3", num = 6, output = "S")
 

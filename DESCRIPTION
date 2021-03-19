@@ -1,6 +1,6 @@
 Package: bridger
 Type: Package
-Title: Bridge hand generator with criteria selector
+Title: Bridge Hand Generator with Criteria Selector
 Version: 0.1.0
 Authors@R: c(person("Jason", "Kaplan", role = c("aut", "cre"),
                      email = "scjase@gmail.com"))
