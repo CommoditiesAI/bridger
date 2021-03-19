@@ -73,25 +73,25 @@ printHands <- function(ids = FALSE, seats = FALSE, handType = "any", num = 12, o
         theme = theme(plot.title = element_text(colour = "darkblue", size = 14, face = "bold"),
                       plot.subtitle = element_text(colour = "darkblue", size = 10, face = "italic"))
       ) +
-      ggplot2::theme(plot.margin = ggplot2::unit(c(2, 2, 2, 2), "pt")) &
-      ggplot2::theme(
+      theme(plot.margin = unit(c(2, 2, 2, 2), "pt")) &
+      theme(
         plot.tag.position = c(0.001, 0.95), ##
         plot.tag = element_text(size = 8, hjust = 0, vjust = 0, colour = "darkblue"), ##
-        panel.background = ggplot2::element_rect(colour = "lightgrey", size = 0.5, fill = NA)
+        panel.background = element_rect(colour = "lightgrey", size = 0.5, fill = NA)
       )
 
     # Save to temp location
     page_location <- tempfile(pattern = "", fileext = ".pdf")
 
     # Save individual pages to temporary location
-    ggplot2::ggsave(filename = page_location, plot = hand_plot,
+    ggsave(filename = page_location, plot = hand_plot,
                     device = cairo_pdf, width = 210 * 0.8, height = 297 * 0.8, units = "mm", dpi = 200)
 
     invisible(page_location)
   }
 
   # Use handType to form the title
-  handTypeName <- dplyr::case_when(
+  handTypeName <- case_when(
   # Simple hands
     handType == "any" ~ "an unspecified opening bid",
     handType %in% c("1major", "major1") ~ "a 1-level major bid",
@@ -115,7 +115,7 @@ printHands <- function(ids = FALSE, seats = FALSE, handType = "any", num = 12, o
   if(ids[1] != FALSE) {
     stopifnot(length(ids) == length(seats) | length(seats) == 1)
     num <- length(ids)
-    handIDs <- tibble::tibble(id = ids, hand = seats, type = "handType")
+    handIDs <- tibble(id = ids, hand = seats, type = "handType")
   } else {
   # Or build set of hands fitting ID
     handIDs <- collectHands(handType = handType, num = num, ...)

@@ -91,27 +91,27 @@ bridgeHand <- function(handNumber = "auto", seat = FALSE, createGraphic = TRUE, 
   # Create pack and shuffle ----
   # Create pack
   pack <- expand.grid(rank = c("A", 2:9, "T", "J", "Q", "K"), suit = suits) %>%
-    tibble::as_tibble() %>%
-    dplyr::mutate(card = paste(suit, rank, sep = "-"))
+    as_tibble() %>%
+    mutate(card = paste(suit, rank, sep = "-"))
 
   # Divide cards into hands
   for (i in 1:4) {
     temp <- sample(pack$card, 13, replace = FALSE) %>%
-      tibble::as_tibble() %>%
-      tidyr::separate(value, sep = "-", into = c("suit", "rank")) %>%
-      dplyr::mutate(
+      as_tibble() %>%
+      separate(value, sep = "-", into = c("suit", "rank")) %>%
+      mutate(
         suit = factor(suit, levels = c("S", "H", "D", "C")),
         rank = factor(rank, levels = c("A", "K", "Q", "J", "T", 9:2, " "))
       ) %>%
-      dplyr::arrange(suit, rank) %>%
-      tidyr::unite("card", sep = "-")
+      arrange(suit, rank) %>%
+      unite("card", sep = "-")
 
     colnames(temp) <- compassPoints[i]
 
     assign(glue::glue("hand{i}"), temp)
 
     pack <- pack %>%
-      dplyr::filter(!card %in% unname(unlist(temp)))
+      filter(!card %in% unname(unlist(temp)))
   }
 
   # Assemble pack
@@ -123,12 +123,12 @@ bridgeHand <- function(handNumber = "auto", seat = FALSE, createGraphic = TRUE, 
   # Extract a hand at a time
   for (j in compassPoints) {
     temp_hand <- pack[j] %>%
-      dplyr::bind_cols(order = 1:13, .) %>%
-      tidyr::separate(!!j, sep = "-", into = c("suit", "rank")) %>%
-      dplyr::mutate(suit = factor(suit, levels = c("S", "H", "D", "C")), rank = factor(rank, levels = c("A", "K", "Q", "J", "T", 9:2, " ", "10"))) %>%
-      dplyr::arrange(suit, rank) %>%
-      tidyr::pivot_wider(names_from = "suit", values_from = "rank") %>%
-      dplyr::select(-order)
+      bind_cols(order = 1:13, .) %>%
+      separate(!!j, sep = "-", into = c("suit", "rank")) %>%
+      mutate(suit = factor(suit, levels = c("S", "H", "D", "C")), rank = factor(rank, levels = c("A", "K", "Q", "J", "T", 9:2, " ", "10"))) %>%
+      arrange(suit, rank) %>%
+      pivot_wider(names_from = "suit", values_from = "rank") %>%
+      select(-order)
 
     # Add back suits, if missing
     if (all(!colnames(temp_hand) %in% "S")) {
@@ -148,7 +148,7 @@ bridgeHand <- function(handNumber = "auto", seat = FALSE, createGraphic = TRUE, 
     }
 
     temp_hand <- temp_hand %>%
-      dplyr::select(S, H, D, C)
+      select(S, H, D, C)
 
 
     # Remove the NAs and then put them back in at the end
@@ -163,7 +163,7 @@ bridgeHand <- function(handNumber = "auto", seat = FALSE, createGraphic = TRUE, 
     }
 
     temp_hand <- temp_hand %>%
-      dplyr::filter_all(dplyr::any_vars(!is.na(.)))
+      filter_all(any_vars(!is.na(.)))
 
     temp_hand <- temp_hand %>%
       replace(is.na(.), " ")
@@ -189,16 +189,16 @@ bridgeHand <- function(handNumber = "auto", seat = FALSE, createGraphic = TRUE, 
   # Count high-card points
   names(HCValues) <- c("A", "K", "Q", "J", "10")
 
-  points <- tibble::tibble(Hand = compassPoints, HC = 0L, Shape = 0L, LTC = 0L)
+  points <- tibble(Hand = compassPoints, HC = 0L, Shape = 0L, LTC = 0L)
 
   for (i in compassPoints) {
     temp <- get(glue::glue("hand{i}")) %>%
-      tibble::rowid_to_column() %>%
-      tidyr::pivot_longer(-rowid) %>%
-      dplyr::filter(value != " ") %>%
-      dplyr::select(value) %>%
+      rowid_to_column() %>%
+      pivot_longer(-rowid) %>%
+      filter(value != " ") %>%
+      select(value) %>%
       table() %>%
-      tibble::as_tibble()
+      as_tibble()
 
     points[points$Hand == i, "HC"] <- round(sum(
       unname(unlist(temp[temp$. == "A", "n"])) * HCValues[["A"]],
@@ -212,13 +212,13 @@ bridgeHand <- function(handNumber = "auto", seat = FALSE, createGraphic = TRUE, 
   # Identify voids, singletons and long suits for shape points
   for (i in compassPoints) {
     hand_shape <- get(glue::glue("hand{i}")) %>%
-      tibble::rowid_to_column() %>%
-      tidyr::pivot_longer(-rowid) %>%
-      dplyr::filter(value != " ") %>%
-      dplyr::group_by(name) %>%
-      dplyr::summarise(shape = max(rowid), .groups = "drop") %>%
-      dplyr::ungroup() %>%
-      dplyr::select(shape) %>%
+      rowid_to_column() %>%
+      pivot_longer(-rowid) %>%
+      filter(value != " ") %>%
+      group_by(name) %>%
+      summarise(shape = max(rowid), .groups = "drop") %>%
+      ungroup() %>%
+      select(shape) %>%
       unname() %>%
       unlist()
 
@@ -238,17 +238,17 @@ bridgeHand <- function(handNumber = "auto", seat = FALSE, createGraphic = TRUE, 
 
   # Calculate total points
   points <- points %>%
-    dplyr::rowwise() %>%
-    dplyr::mutate(Total = sum(HC + Shape)) %>%
-    dplyr::relocate(LTC, .after = Total)
+    rowwise() %>%
+    mutate(Total = sum(HC + Shape)) %>%
+    relocate(LTC, .after = Total)
 
   # Calculate losing trick count ---
   if(LTCSchema != FALSE) {
     for (i in compassPoints) {
       current_hand <- get(glue::glue("hand{i}")) %>%
-        dplyr::slice(1:3) %>%
-        dplyr::mutate(across(.cols = everything(), as.character)) %>%
-        dplyr::mutate(across(.cols = everything(), ~ ifelse(.x %in% c("A", "K", "Q", " ", "Void"), .x, "x")))
+        slice(1:3) %>%
+        mutate(across(.cols = everything(), as.character)) %>%
+        mutate(across(.cols = everything(), ~ ifelse(.x %in% c("A", "K", "Q", " ", "Void"), .x, "x")))
 
       # Start with 0 or 1 if there is no ace in the suit
       ltc <- ifelse(any(stringr::str_detect(unname(unlist(current_hand)), "A")), 0, 1)
@@ -287,7 +287,7 @@ bridgeHand <- function(handNumber = "auto", seat = FALSE, createGraphic = TRUE, 
 
   # Rename LTC column in points
   points <- points %>%
-    dplyr::rename_with(~ glue::glue("LTC ({stringr::str_to_title(LTCSchema)})"), LTC)
+    rename_with(~ glue::glue("LTC ({stringr::str_to_title(LTCSchema)})"), LTC)
 
   # Create the graphic object ----
   if (createGraphic) {
@@ -297,7 +297,7 @@ bridgeHand <- function(handNumber = "auto", seat = FALSE, createGraphic = TRUE, 
   }
 
   # Collate the hand shapes
-  handShapes <- tibble::tibble(
+  handShapes <- tibble(
     N = colSums(handN != " "),
     E = colSums(handE != " "),
     S = colSums(handS != " "),

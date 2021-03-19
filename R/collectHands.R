@@ -66,7 +66,7 @@ collectHands <- function(handType = "any", num = 6, ...) {
   returnHands <- tibble(id = numeric(num), hand = character(num), type = handType)
 
   # Which type of hand is waned
-  findCall <- dplyr::case_when(
+  findCall <- case_when(
   # Simple hand types
     handType %in% c("any") ~ "find_any",
     handType %in% c("weakNT", "weaknt", "weakbalanced") ~ "find_weakNT",
