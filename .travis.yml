@@ -1,10 +1,22 @@
 # R for travis: see documentation at https://docs.travis-ci.com/user/languages/r
 
-language: R
+before_install:
+- sudo apt-get -qq install poppler
+language: r
 r:
-- release
 - devel
 os:
 - linux
 - osx
-cache: packages
+
+r_build_args: '--no-build-vignettes'
+
+# remove default --as-cran so testthat tests are run (also avoids to useless check notes)
+r_check_args: '--ignore-vignettes'
+
+notifications:
+  email:
+    recipients:
+      - scjase@gmail.com
+    on_success: always # always|never|change, default: change
+    on_failure: always # default: always
