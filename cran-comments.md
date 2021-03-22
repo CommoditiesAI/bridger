@@ -13,8 +13,7 @@ N  checking for non-standard things in the check directory
    Found the following files/directories:
      'temp'
 
-* The example produces temporary files.  These are the required output, and so can't be tidied up.
-  Similar questions on Stackoverflow, indicates these occur when going from Latex to PDF:
+* Similar questions on Stackoverflow, indicates these occur when producing PDF documents from Latex:
   https://stackoverflow.com/questions/62456137/r-cran-check-detritus-in-temp-directory
 
 

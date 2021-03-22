@@ -37,7 +37,7 @@
 #' @export
 
 
-printHands <- function(ids = FALSE, seats = FALSE, handType = "any", num = 12, outputSeats = "F", saveOutputDir = "temp", ...) {
+printHands <- function(ids = FALSE, seats = FALSE, handType = "any", num = 12, outputSeats = "F", saveOutputDir = FALSE, ...) {
   # Add a timer
   startTme <- Sys.time()
 
@@ -221,7 +221,6 @@ printHands <- function(ids = FALSE, seats = FALSE, handType = "any", num = 12, o
     # Combine temporary pages into final output
     pdftools::pdf_combine(page_list, glue::glue("{saveOutputDir}\\bridgeHands_{handType}_south.pdf"))
     message(glue::glue("South hands saved to - {saveOutputDir}\\bridgeHands_{handType}_south.pdf"))
-
 
     # Remove temp pages
     unlink(page_list)
