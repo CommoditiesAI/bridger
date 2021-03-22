@@ -1,12 +1,28 @@
 #' @title find_any
 #'
-#' @description Return any bridge hand - Default
+#' @description Return any bridge hand - May not be an opener
+#'
+#' @return id and seat of compliant hand
+
+
+find_any <- function() {
+  testHand <- bridgeHand(createGraphic = FALSE)
+
+  seat <- sample(1:4, 1)
+
+  # Return the id and seat
+  return(invisible(list(id = testHand$id, seat = c("N", "E", "S", "W")[seat])))
+}
+
+#' @title find_opener
+#'
+#' @description Return a bridge hand that is likely to open
 #'
 #' @return id and seat of compliant hand
 #'
 #' @param HC_low The minimum number of high-card points
 
-find_any <- function(HC_low = 12) {
+find_opener <- function(HC_low = 12) {
   repeat {
     testHand <- bridgeHand(createGraphic = FALSE)
 

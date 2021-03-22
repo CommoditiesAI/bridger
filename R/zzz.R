@@ -2,6 +2,8 @@
 #'
 #' @description Runs on loading bridger
 #'
+#' @return No return value, called to set global variables and specify import packages
+#'
 #' @param libname Legacy dummy
 #' @param pkgname Legacy dummy
 #'

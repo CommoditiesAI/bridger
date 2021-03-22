@@ -49,13 +49,12 @@ createGraphic <- function(handNo, handN, handE, handS, handW, dealer, vuln, poin
 
   header <- tibble(
     "Hand ID" = sub("\\s+$", "", gsub("(.{3})", "\\1 ", handNo)),
-    " " = " ",
     "Dealer" = dealer,
     "Vuln." = vuln
   )
 
   header <- as_tibble(cbind(" " = names(header), t(header)), .name_repair = "minimal") %>%
-    rename(Value = 2)
+    rename("   " = 2)
 
   # Create central compass rose
   compass <- ggplot() +
@@ -72,10 +71,10 @@ createGraphic <- function(handNo, handN, handE, handS, handW, dealer, vuln, poin
       arrow = arrow(length = unit(0.03, "npc"), ends = "both"),
       lwd = 0.6, colour = ifelse(vuln %in% c("EW", "Both"), "red", "black")
     ) +
-    geom_text(aes(x = 0, y = 0.25, label = "N"), size = 5, colour = ifelse(vuln %in% c("NS", "Both"), "red", "black")) +
-    geom_text(aes(x = 0.25, y = 0, label = "E"), size = 5, colour = ifelse(vuln %in% c("EW", "Both"), "red", "black")) +
-    geom_text(aes(x = 0, y = -0.25, label = "S"), size = 5, colour = ifelse(vuln %in% c("NS", "Both"), "red", "black")) +
-    geom_text(aes(x = -0.25, y = 0, label = "W"), size = 5, colour = ifelse(vuln %in% c("EW", "Both"), "red", "black")) +
+    geom_text(aes(x = 0, y = 0.25, label = "N"), size = 4.5, colour = ifelse(vuln %in% c("NS", "Both"), "red", "black")) +
+    geom_text(aes(x = 0.25, y = 0, label = "E"), size = 4.5, colour = ifelse(vuln %in% c("EW", "Both"), "red", "black")) +
+    geom_text(aes(x = 0, y = -0.25, label = "S"), size = 4.5, colour = ifelse(vuln %in% c("NS", "Both"), "red", "black")) +
+    geom_text(aes(x = -0.25, y = 0, label = "W"), size = 4.5, colour = ifelse(vuln %in% c("EW", "Both"), "red", "black")) +
     theme_void() +
     theme(aspect.ratio = 1)
 
@@ -92,6 +91,7 @@ createGraphic <- function(handNo, handN, handE, handS, handW, dealer, vuln, poin
   handW[handW == "T"] <- "10"
 
   # Build grobs ----
+  # TODO Awaiting grob conversion of GT objections for neater table
   grob_header <- gridExtra::tableGrob(header, rows = NULL, theme = boxTheme)
   grob_points <- points %>%
     select(1:4) %>%
@@ -142,9 +142,6 @@ createGraphic <- function(handNo, handN, handE, handS, handW, dealer, vuln, poin
     }
   }
 
-  # # Image of card hand to add later for background/top-right grob
-  #   graphic <- system.file("extdata", "hand_image.png", package = "cowplot")
-
   hand_graphic <- cowplot::plot_grid(
     grob_header, grob_N, NULL,
     grob_W, compass, grob_E,
@@ -152,7 +149,7 @@ createGraphic <- function(handNo, handN, handE, handS, handW, dealer, vuln, poin
   )
 
   # TODO Change from cowplot to patchwork to remove dependency
-  # Found manual manipulation of grobs in printHands alluded me
+  # Manual manipulation of grobs in printHands alluded me
   # hand_graphic <- wrap_elements(panel = grob_header) +
   #   grob_N + plot_spacer() +
   #   grob_W + compass + grob_E +

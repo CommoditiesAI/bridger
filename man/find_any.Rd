@@ -4,14 +4,11 @@
 \alias{find_any}
 \title{find_any}
 \usage{
-find_any(HC_low = 12)
-}
-\arguments{
-\item{HC_low}{The minimum number of high-card points}
+find_any()
 }
 \value{
 id and seat of compliant hand
 }
 \description{
-Return any bridge hand - Default
+Return any bridge hand - May not be an opener
 }

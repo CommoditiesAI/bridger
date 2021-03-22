@@ -19,7 +19,11 @@
 #' @export
 
 suitSplit <- function(missingCards = 5, cards_W = 13, cards_E = 13) {
-  outTable <- tibble("Cards held by West" = 0:missingCards, "Cards held by East" = missingCards:0, Probability = 0)
+  outTable <- tibble(
+    "Cards held by West" = 0:missingCards,
+    "Cards held by East" = missingCards:0,
+    Probability = 0
+  )
 
   for (i in outTable$"Cards held by West") {
     unknown_W <- i
@@ -43,9 +47,9 @@ suitSplit <- function(missingCards = 5, cards_W = 13, cards_E = 13) {
     unlist()
 
   if (cards_W == cards_E) {
-    subtitleText <- glue::glue("Symmetrical probabilities reflecting {cards_W} unknown cards held by both West and East'")
+    subtitleText <- glue::glue("Symmetrical probabilities reflecting {cards_W} unknown cards held by both West and East")
   } else {
-    subtitleText <- glue::glue("Asymmetrical probabilities reflecting {cards_W} unknown cards in West and {cards_E} in East'")
+    subtitleText <- glue::glue("Asymmetrical probabilities reflecting {cards_W} unknown cards in West and {cards_E} in East")
   }
 
   graph <- ggplot(outTable) +

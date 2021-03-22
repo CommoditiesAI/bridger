@@ -11,6 +11,9 @@
 
 \item{pkgname}{Legacy dummy}
 }
+\value{
+No return value, called to set global variables and specify import packages
+}
 \description{
 Runs on loading bridger
 }

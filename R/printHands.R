@@ -1,57 +1,65 @@
 #' @title printHands
 #'
-#' @description Produce a graphic of hands as a hand-out.  Each page can hold up to 6 hands.
+#' @description Produce a page of bridge hands as a PDF.  Each page can hold up to 6 hands, and can show all seats or one of the seats can be selected
+#' through the 'outputSeats' parameter.
 #'
-#'   Pages of full hands, or only one set of hands can be selected.  "ALL" is equivalent to FULL and separate pages of
-#'   each of the four positions.  "N", "E", "S" or "W" will produce only show the points and hands for those positions.
+#' \itemize{
+#'   \item{"FULL" or "F"}{ - Show all seats.}
+#'   \item{"N" / "E" / "S" / "W"}{ - Show only the specified seats on separate outputs. e.g. "NS" to generate North and South seats.}
+#'   \item{"ALL" or "A"}{ - Equivalent to "FNEWS", i.e. Separate pages of each of the four seats, and one page with all seats.}
+#'   }
 #'
-#'   The output will be a PDF for the selected hand sets.  The default is to save them to a default directory, but a directory can be specified
-#'   in saveOutput in which the PDF will be saved.
+#'   In all cases, only point counts for the selected seats will be visible.
+#'
+#'   The output PDFs will be saved to a temporary directory, but a directory can be specified in the 'saveOutput' parameter.
 #'
 #' @param ids The ids of hands to be generated
-#' @param seats The seats of the hands in ids, i.e. the seat which gives the requested conditions
+#' @param seats The seats of the hands in ids, i.e. the seat which gives the requested conditions, this will become South when printed
 #' @param handType The type of hand required, default is 'any'.  Alternatives include, '4441', 'strong', ...
 #' @param num The number of hands wanted
-#' @param output Character code of required seats, "N", "E", "S", "W" and "F" for the full hand NB "ALL" equivalent to "FNEWS"
+#' @param outputSeats Character code of required seats, "N", "E", "S", "W" and "F" for the full hand NB "ALL" equivalent to "FNEWS"
 #' @param saveOutputDir Default "temp" to save to temporary directory, or specify a directory, e.g. "c:/temp/bridger"
 #' @param ... Other variables that may be passed when selecting compliant hands
 #'
+#' @return Text message, confirming completion and specifying location of PDF outputs
+#'
 #' @examples
-#' \dontrun{
-#' # Produce a hand showing all seats and save them to c:/temp/bridger
-#' printHands(handType = "any", num = 1, output = "all", saveOutput = "c:/temp/bridger")
+#' # Produce a hand showing all seats and save them to 'c:/temp/bridger' directory
+#' printHands(handType = "any", num = 1, outputSeats = "FULL", saveOutput = "c:/temp/bridger")
+#' \donttest{
+#' # Produce a page of 6 hands likely to open with a 3-level preempt, only showing the South seat
+#' printHands(handType = "preempt3", num = 6, outputSeats = "S")
 #'
-#' # Produce a page of 6 South hands likely to open with a 3-level preempt
-#' printHands(handType = "preempt3", num = 6, output = "S")
-#'
-#' # Produce specified hands
-#' printHands(ids = c(500, 501, 502), seats = c("E", "W", "S", output = "F"))
+#' # Produce the specified hands, showing all seats
+#' printHands(ids = c(500, 501, 502), seats = c("E", "W", "S"), outputSeats = "FULL")
 #' }
 #'
 #' @export
 
-printHands <- function(ids = FALSE, seats = FALSE, handType = "any", num = 12, output = "F", saveOutputDir = "temp", ...) {
+printHands <- function(ids = FALSE, seats = FALSE, handType = "any", num = 12, outputSeats = "F", saveOutputDir = "temp", ...) {
 
   # Add a timer
   startTme <- Sys.time()
 
   # Check output complies
-  output <- tolower(output)
+  outputSeats <- tolower(outputSeats)
 
-  if (output %in% c("all", "a")) {
-    output <- "fnesw"
-  }
+  outputSeats <- dplyr::case_when(
+    outputSeats == "full" ~ "f",
+    outputSeats %in% c("all", "a") ~ "fnesw",
+    TRUE ~ outputSeats
+  )
 
-  check_output <- output
+  check_outputSeats <- outputSeats
   for (i in c("f", "n", "e", "s", "w")) {
-    check_output <- stringr::str_replace(check_output, i, "")
+    check_outputSeats <- stringr::str_replace(check_outputSeats, i, "")
   }
 
-  if (!check_output == "") {
-    stop(glue::glue("Unknown output type '{check_output}' requested"))
+  if (!check_outputSeats == "") {
+    stop(glue::glue("Unknown seats parameter requested - '{check_outputSeats}'"))
   }
 
-  # Check bridger directory exists, if requested to save there
+  # Check if requested directory exists, if saving to a non-temporary directory
   if (saveOutputDir != FALSE) {
     if (!dir.exists(saveOutputDir)) {
       print(glue::glue("Creating directory '{saveOutputDir}' to save output sheets"))
@@ -59,7 +67,7 @@ printHands <- function(ids = FALSE, seats = FALSE, handType = "any", num = 12, o
     }
   } else {
     saveOutputDir <- tempdir(check = TRUE)
-    message(glue::glue("Saving output to temporary directory '{saveOutputDir}\\'"))
+    message(glue::glue("Saving output to temporary directory: '{saveOutputDir}\\'"))
   }
 
   # Build graphic function
@@ -69,7 +77,7 @@ printHands <- function(ids = FALSE, seats = FALSE, handType = "any", num = 12, o
       patchwork::plot_annotation(
         title = glue::glue("Bridge hands generated to open with {handTypeName}"),
         subtitle = glue::glue("Page: {i+1} - {handLabel}"), caption = glue::glue("Page: {i+1}"),
-        tag_levels = "1", tag_prefix = "Hand ", tag_suffix = ":", ##
+        tag_levels = "1", tag_prefix = "Hand ", tag_suffix = ":",
         theme = theme(
           plot.title = element_text(colour = "darkblue", size = 14, face = "bold"),
           plot.subtitle = element_text(colour = "darkblue", size = 10, face = "italic")
@@ -78,7 +86,7 @@ printHands <- function(ids = FALSE, seats = FALSE, handType = "any", num = 12, o
       theme(plot.margin = unit(c(2, 2, 2, 2), "pt")) &
       theme(
         plot.tag.position = c(0.001, 0.95), ##
-        plot.tag = element_text(size = 8, hjust = 0, vjust = 0, colour = "darkblue"), ##
+        plot.tag = element_text(size = 8, hjust = 0, vjust = 0, colour = "darkblue"),
         panel.background = element_rect(colour = "lightgrey", size = 0.5, fill = NA)
       )
 
@@ -96,8 +104,9 @@ printHands <- function(ids = FALSE, seats = FALSE, handType = "any", num = 12, o
 
   # Use handType to form the title
   handTypeName <- case_when(
-    # Simple hands
-    handType == "any" ~ "an unspecified opening bid",
+    # Simple bids
+    handType == "any" ~ "an unspecified bid or to pass",
+    handType %in% c("opener", "opening") ~ "an unspecified opening bid",
     handType %in% c("1major", "major1") ~ "a 1-level major bid",
     handType %in% c("weakNT", "weakbalanced", "weaknt") ~ "a weak, balanced shape",
     handType %in% c("strongNT", "strongbalanced", "strongnt") ~ "a strong balanced shape",
@@ -106,8 +115,8 @@ printHands <- function(ids = FALSE, seats = FALSE, handType = "any", num = 12, o
     handType %in% c("3preempt", "preempt3", "weak3") ~ "a weak 3-level bid",
     handType %in% c("1444", "4144", "4414", "4441") ~ "a '4441' shape",
 
-    # Composite hands
-    handType %in% c("weak1NTdouble", "weak1NTx", "double-after-NT", "1NT_double") ~ "weak 1NT\nfollowed by double by LHO",
+    # Composite bids
+    handType %in% c("weak1NTdouble", "weak1NTx", "double-after-NT", "1NT_LHOdouble", "1NT_double") ~ "weak 1NT\nfollowed by double by LHO",
     handType %in% c("weak1NTbid", "bid-after-NT", "1NT_LHObid") ~ "weak 1NT\nfollowed by an overcall by LHO",
     handType %in% c("weak1NTRHObid", "RHObid-after-NT", "1NT_RHObid") ~ "weak 1NT\nfollowed by an overcall by RHO",
     handType %in% c("jacoby2NT") ~ "a 1-level major\nfollowed by partner responding Jacoby 2NT",
@@ -119,21 +128,21 @@ printHands <- function(ids = FALSE, seats = FALSE, handType = "any", num = 12, o
   if (ids[1] != FALSE) {
     stopifnot(length(ids) == length(seats) | length(seats) == 1)
     num <- length(ids)
-    handIDs <- tibble(id = ids, hand = seats, type = "handType")
+    handIDs <- tibble(id = ids, seat = seats, type = "handType")
   } else {
     # Or build set of hands fitting ID
     handIDs <- collectHands(handType = handType, num = num, ...)
   }
 
   # Generate graphics from hand IDs ----
-  hands <- mapply(bridgeHand, handIDs$id[1:num], seat = handIDs$hand[1:num]) %>%
+  hands <- mapply(bridgeHand, handIDs$id[1:num], seat = handIDs$seat[1:num]) %>%
     rbind(type = handIDs$type)
 
   # How many complete groups/pages of 6 hands
   chunks <- split(1:num, ceiling(seq_along(1:num) / 6))
 
   # If full hands requested ----
-  if (grepl(pattern = "f", x = output)) {
+  if (grepl(pattern = "f", x = outputSeats)) {
 
     # Extract the individual hands and save to temporary "printHand_"
     for (i in 0:(length(chunks) - 1)) {
@@ -166,7 +175,7 @@ printHands <- function(ids = FALSE, seats = FALSE, handType = "any", num = 12, o
   }
 
   # If Souths requested ----
-  if (grepl(pattern = "s", x = output)) {
+  if (grepl(pattern = "s", x = outputSeats)) {
     adjustTable <- c(13, 14, 16, 17, 18, 20, 21, 22, 24)
 
     # How many complete groups/pages of 6 hands
@@ -219,10 +228,10 @@ printHands <- function(ids = FALSE, seats = FALSE, handType = "any", num = 12, o
   }
 
   # If Wests requested ----
-  if (grepl(pattern = "w", x = output)) {
+  if (grepl(pattern = "w", x = outputSeats)) {
 
     # Use IDs to generate compliant hands - Need to recompile as manipulation for South removed elements
-    hands <- mapply(bridgeHand, handIDs$id[1:num], seat = handIDs$hand[1:num]) %>%
+    hands <- mapply(bridgeHand, handIDs$id[1:num], seat = handIDs$seat[1:num]) %>%
       rbind(type = handIDs$type)
 
     adjustTable <- c(13, 14, 15, 17, 18, 19, 21, 22, 23)
@@ -276,10 +285,10 @@ printHands <- function(ids = FALSE, seats = FALSE, handType = "any", num = 12, o
   }
 
   # If Norths requested ----
-  if (grepl(pattern = "n", x = output)) {
+  if (grepl(pattern = "n", x = outputSeats)) {
 
     # Use IDs to generate compliant hands - Need to recompile as manipulation for South removed elements
-    hands <- mapply(bridgeHand, handIDs$id[1:num], seat = handIDs$hand[1:num]) %>%
+    hands <- mapply(bridgeHand, handIDs$id[1:num], seat = handIDs$seat[1:num]) %>%
       rbind(type = handIDs$type)
 
     adjustTable <- c(14, 15, 16, 18, 19, 20, 22, 23, 24)
@@ -333,10 +342,10 @@ printHands <- function(ids = FALSE, seats = FALSE, handType = "any", num = 12, o
   }
 
   # If Easts requested ----
-  if (grepl(pattern = "e", x = tolower(output))) {
+  if (grepl(pattern = "e", x = outputSeats)) {
 
     # Use IDs to generate compliant hands - Need to recompile as manipulation for South removed elements
-    hands <- mapply(bridgeHand, handIDs$id[1:num], seat = handIDs$hand[1:num]) %>%
+    hands <- mapply(bridgeHand, handIDs$id[1:num], seat = handIDs$seat[1:num]) %>%
       rbind(type = handIDs$type)
 
     adjustTable <- c(13, 15, 16, 17, 19, 20, 21, 23, 24)
@@ -395,7 +404,7 @@ printHands <- function(ids = FALSE, seats = FALSE, handType = "any", num = 12, o
   ))
 
   return(glue::glue("{sets} of {length(chunks)} {pages} of hands saved to {saveOutputDir}",
-    sets = ifelse(nchar(output) == 1, "A set", glue::glue("{nchar(output)} sets")),
+    sets = ifelse((nchar(outputSeats) == 1 | outputSeats %in% c("f", "full")), "A set", glue::glue("{nchar(outputSeats)} sets")),
     pages = ifelse(length(chunks) == 1, "page", "pages")
   ))
 }

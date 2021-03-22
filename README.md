@@ -12,7 +12,7 @@ Functions to be added:
 
 To generate a page of 6 opening hands, showing all seats:
 
-    printHands(handType = "any", num = 6, output = "f")
+    printHands(handType = "opener", num = 6, output = "FULL")
 
 To generate a page of hands likely to open a pre-emptive at the 3-level, showing only the opener
 
