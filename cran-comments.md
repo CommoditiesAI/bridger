@@ -1,21 +1,12 @@
 ## Resubmission
-This is a resubmission. In this version I have:
+This is a re-submission. In this version I have:
 
 * Added "\value"" to those files where it was missing
 
 * Changed "\dontrun{}" to "\donttest{}"
-  This change results in a new note when running "R CMD check" locally
 
 # R CMD check results
-0 errors | 0 warnings | 1 note
-
-N  checking for non-standard things in the check directory
-   Found the following files/directories:
-     'temp'
-
-* Similar questions on Stackoverflow, indicates these occur when producing PDF documents from Latex:
-  https://stackoverflow.com/questions/62456137/r-cran-check-detritus-in-temp-directory
-
+0 errors | 0 warnings | 0 note
 
 ## Test environments
 # Through R-hub

@@ -10,7 +10,7 @@ printHands(
   handType = "any",
   num = 12,
   outputSeats = "F",
-  saveOutputDir = "temp",
+  saveOutputDir = FALSE,
   ...
 )
 }
@@ -25,7 +25,7 @@ printHands(
 
 \item{outputSeats}{Character code of required seats, "N", "E", "S", "W" and "F" for the full hand NB "ALL" equivalent to "FNEWS"}
 
-\item{saveOutputDir}{Default "temp" to save to temporary directory, or specify a directory, e.g. "c:/temp/bridger"}
+\item{saveOutputDir}{If FALSE (Default) will save to temporary directory, or specify a directory, e.g. "c:/temp/bridger"}
 
 \item{...}{Other variables that may be passed when selecting compliant hands}
 }
@@ -48,7 +48,7 @@ through the 'outputSeats' parameter.
 }
 \examples{
 # Produce a hand showing all seats and save them to 'c:/temp/bridger' directory
-printHands(handType = "any", num = 1, outputSeats = "FULL", saveOutput = "c:/temp/bridger")
+printHands(handType = "any", num = 1, outputSeats = "FULL", saveOutput = FALSE)
 \donttest{
 # Produce a page of 6 hands likely to open with a 3-level preempt, only showing the South seat
 printHands(handType = "preempt3", num = 6, outputSeats = "S")
