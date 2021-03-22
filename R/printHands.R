@@ -61,7 +61,7 @@ printHands <- function(ids = FALSE, seats = FALSE, handType = "any", num = 12, o
 
 
   # Check if requested directory exists, if saving to a non-temporary directory
-  if (saveOutputDir != FALSE) {
+  if (saveOutputDir == FALSE) {
     saveOutputDir <- tempdir(check = TRUE)
     message(glue::glue("Saving output to temporary directory: '{saveOutputDir}\\'"))
   } else {
