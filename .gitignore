@@ -28,3 +28,5 @@ vignettes/*.pdf
 .Renviron
 .Rbuildignore
 .github
+CRAN-RELEASE
+.gitignore

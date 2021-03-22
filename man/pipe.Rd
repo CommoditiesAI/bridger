@@ -6,6 +6,9 @@
 \usage{
 lhs \%>\% rhs
 }
+\value{
+No return value, called to allow piping
+}
 \description{
 ## Implements the magrittr Pipe function
 }

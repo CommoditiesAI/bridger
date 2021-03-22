@@ -202,7 +202,3 @@ find_1major_jacoby2NT <- function(HC_low = 13, cardLen_low = 4) {
 
   return("Error in find_1major_jacoby2NT")
 }
-
-temp <- find_1major_jacoby2NT()
-
-(bridgeHand(temp$id, temp$seat))

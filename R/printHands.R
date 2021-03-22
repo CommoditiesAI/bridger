@@ -36,8 +36,8 @@
 #'
 #' @export
 
-printHands <- function(ids = FALSE, seats = FALSE, handType = "any", num = 12, outputSeats = "F", saveOutputDir = "temp", ...) {
 
+printHands <- function(ids = FALSE, seats = FALSE, handType = "any", num = 12, outputSeats = "F", saveOutputDir = "temp", ...) {
   # Add a timer
   startTme <- Sys.time()
 
@@ -58,6 +58,7 @@ printHands <- function(ids = FALSE, seats = FALSE, handType = "any", num = 12, o
   if (!check_outputSeats == "") {
     stop(glue::glue("Unknown seats parameter requested - '{check_outputSeats}'"))
   }
+
 
   # Check if requested directory exists, if saving to a non-temporary directory
   if (saveOutputDir != FALSE) {
