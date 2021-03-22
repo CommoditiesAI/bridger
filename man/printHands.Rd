@@ -9,7 +9,7 @@ printHands(
   seats = FALSE,
   handType = "any",
   num = 12,
-  output = "F",
+  outputSeats = "F",
   saveOutputDir = "temp",
   ...
 )
@@ -17,37 +17,44 @@ printHands(
 \arguments{
 \item{ids}{The ids of hands to be generated}
 
-\item{seats}{The seats of the hands in ids, i.e. the seat which gives the requested conditions}
+\item{seats}{The seats of the hands in ids, i.e. the seat which gives the requested conditions, this will become South when printed}
 
 \item{handType}{The type of hand required, default is 'any'.  Alternatives include, '4441', 'strong', ...}
 
 \item{num}{The number of hands wanted}
 
-\item{output}{Character code of required seats, "N", "E", "S", "W" and "F" for the full hand NB "ALL" equivalent to "FNEWS"}
+\item{outputSeats}{Character code of required seats, "N", "E", "S", "W" and "F" for the full hand NB "ALL" equivalent to "FNEWS"}
 
 \item{saveOutputDir}{Default "temp" to save to temporary directory, or specify a directory, e.g. "c:/temp/bridger"}
 
 \item{...}{Other variables that may be passed when selecting compliant hands}
 }
+\value{
+Text message, confirming completion and specifying location of PDF outputs
+}
 \description{
-Produce a graphic of hands as a hand-out.  Each page can hold up to 6 hands.
+Produce a page of bridge hands as a PDF.  Each page can hold up to 6 hands, and can show all seats or one of the seats can be selected
+through the 'outputSeats' parameter.
 
-  Pages of full hands, or only one set of hands can be selected.  "ALL" is equivalent to FULL and separate pages of
-  each of the four positions.  "N", "E", "S" or "W" will produce only show the points and hands for those positions.
+\itemize{
+  \item{"FULL" or "F"}{ - Show all seats.}
+  \item{"N" / "E" / "S" / "W"}{ - Show only the specified seats on separate outputs. e.g. "NS" to generate North and South seats.}
+  \item{"ALL" or "A"}{ - Equivalent to "FNEWS", i.e. Separate pages of each of the four seats, and one page with all seats.}
+  }
 
-  The output will be a PDF for the selected hand sets.  The default is to save them to a default directory, but a directory can be specified
-  in saveOutput in which the PDF will be saved.
+  In all cases, only point counts for the selected seats will be visible.
+
+  The output PDFs will be saved to a temporary directory, but a directory can be specified in the 'saveOutput' parameter.
 }
 \examples{
-\dontrun{
-# Produce a hand showing all seats and save them to c:/temp/bridger
-printHands(handType = "any", num = 1, output = "all", saveOutput = "c:/temp/bridger")
+# Produce a hand showing all seats and save them to 'c:/temp/bridger' directory
+printHands(handType = "any", num = 1, outputSeats = "FULL", saveOutput = "c:/temp/bridger")
+\donttest{
+# Produce a page of 6 hands likely to open with a 3-level preempt, only showing the South seat
+printHands(handType = "preempt3", num = 6, outputSeats = "S")
 
-# Produce a page of 6 South hands likely to open with a 3-level preempt
-printHands(handType = "preempt3", num = 6, output = "S")
-
-# Produce specified hands
-printHands(ids = c(500, 501, 502), seats = c("E", "W", "S", output = "F"))
+# Produce the specified hands, showing all seats
+printHands(ids = c(500, 501, 502), seats = c("E", "W", "S"), outputSeats = "FULL")
 }
 
 }
