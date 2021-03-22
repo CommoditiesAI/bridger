@@ -62,13 +62,13 @@ printHands <- function(ids = FALSE, seats = FALSE, handType = "any", num = 12, o
 
   # Check if requested directory exists, if saving to a non-temporary directory
   if (saveOutputDir != FALSE) {
-    if (!dir.exists(saveOutputDir)) {
-      print(glue::glue("Creating directory '{saveOutputDir}' to save output sheets"))
-      dir.create(saveOutputDir, recursive = TRUE)
-    }
-  } else {
     saveOutputDir <- tempdir(check = TRUE)
     message(glue::glue("Saving output to temporary directory: '{saveOutputDir}\\'"))
+  } else {
+    if (!dir.exists(saveOutputDir)) {
+      print(glue::glue("Creating directory '{saveOutputDir}' to save outputs"))
+    dir.create(saveOutputDir, recursive = TRUE)
+    }
   }
 
   # Build graphic function
