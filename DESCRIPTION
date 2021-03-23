@@ -10,7 +10,11 @@ Maintainer: Jason Kaplan <scjase@gmail.com>
 Description: Produce bridge hands, allowing parameters for hands to offer specific for bidding sequences.
 License: GPL (>= 3)
 Encoding: UTF-8
-LazyData: true
 RoxygenNote: 7.1.1
 Imports: cowplot, dplyr, patchwork, tibble, tidyr, magrittr, ggplot2, ggedit, glue, gridExtra, kableExtra, pdftools, scales, stringr
 SystemRequirements: LaTeX(texi2dvi) must be present in the system to create PDF reports
+Depends: 
+    R (>= 2.10)
+Suggests: 
+    spelling
+Language: en-US
