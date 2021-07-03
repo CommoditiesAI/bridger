@@ -47,9 +47,9 @@ through the 'outputSeats' parameter.
   The output PDFs will be saved to a temporary directory, but a directory can be specified in the 'saveOutput' parameter.
 }
 \examples{
+\dontrun{
 # Produce a hand showing all seats and save them to 'c:/temp/bridger' directory
 printHands(handType = "any", num = 1, outputSeats = "FULL", saveOutput = FALSE)
-\donttest{
 # Produce a page of 6 hands likely to open with a 3-level preempt, only showing the South seat
 printHands(handType = "preempt3", num = 6, outputSeats = "S")
 

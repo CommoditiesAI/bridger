@@ -40,9 +40,11 @@ To change the hand evaluation pass high card values (HCValues) and shape values 
   This assumes a fit will be found.  It is currently not implemented.
 }
 \examples{
+\dontrun{
 # Produce a bridge hand
 hand <- bridgeHand()
 
 # Produce a bridge hand '500' ensuring South as dealer
 hand500 <- bridgeHand(handNumber = 500, seat = "S") # Seat can be any compass point
+}
 }

@@ -155,6 +155,5 @@ createGraphic <- function(handNo, handN, handE, handS, handW, dealer, vuln, poin
   #   grob_W + compass + grob_E +
   #   grob_points + grob_S + grob_ltc
 
-
   invisible(hand_graphic)
 }

@@ -24,9 +24,9 @@
 #' @return Text message, confirming completion and specifying location of PDF outputs
 #'
 #' @examples
+#' \dontrun{
 #' # Produce a hand showing all seats and save them to 'c:/temp/bridger' directory
 #' printHands(handType = "any", num = 1, outputSeats = "FULL", saveOutput = FALSE)
-#' \donttest{
 #' # Produce a page of 6 hands likely to open with a 3-level preempt, only showing the South seat
 #' printHands(handType = "preempt3", num = 6, outputSeats = "S")
 #'
@@ -67,7 +67,7 @@ printHands <- function(ids = FALSE, seats = FALSE, handType = "any", num = 12, o
   } else {
     if (!dir.exists(saveOutputDir)) {
       print(glue::glue("Creating directory '{saveOutputDir}' to save outputs"))
-    dir.create(saveOutputDir, recursive = TRUE)
+      dir.create(saveOutputDir, recursive = TRUE)
     }
   }
 
@@ -121,7 +121,6 @@ printHands <- function(ids = FALSE, seats = FALSE, handType = "any", num = 12, o
     handType %in% c("weak1NTbid", "bid-after-NT", "1NT_LHObid") ~ "weak 1NT\nfollowed by an overcall by LHO",
     handType %in% c("weak1NTRHObid", "RHObid-after-NT", "1NT_RHObid") ~ "weak 1NT\nfollowed by an overcall by RHO",
     handType %in% c("jacoby2NT") ~ "a 1-level major\nfollowed by partner responding Jacoby 2NT",
-
     handType == TRUE ~ handType
   )
 

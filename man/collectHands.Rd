@@ -51,9 +51,9 @@ Existing functions and key parameters are currently:
 Other parameters are also used, but individually assigned in the function.
 }
 \examples{
+\dontrun{
 # Collect the ids of 2 hands with any shape
 hands <- collectHands(num = 2)
-\donttest{
 # Collect 6 hands with opening points and a "4441" shape
 hands <- collectHands(handType = "4441", num = 6)
 

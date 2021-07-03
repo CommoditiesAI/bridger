@@ -19,14 +19,9 @@ Check: for detritus in the temp directory, Result: NOTE
   Found the following files/directories:
     'RtmpbbllxA\bridgeHands_any_full.pdf'
     
-* This temporary file is created from running the examples.  The PDF is the intended output of the package
+* This temporary file was created when running the examples. 
+* Made examples "\dontrun{}" so they do not generate temporary files that persist after running
 
-
-This is a re-submission. In this version I have:
-
-* Added "\value"" to those files where it was missing
-
-* Changed "\dontrun{}" to "\donttest{}"
 
 # R CMD check results
 0 errors | 0 warnings | 0 note
