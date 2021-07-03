@@ -63,6 +63,22 @@ bridgeHand <- function(handNumber = "auto", seat = FALSE, createGraphic = TRUE, 
     LTCSchema <- FALSE
   }
 
+  # Two optional parameters to make the deal a little wacky by affecting sample()'s probability
+  # Random effects, rather than direct control of skewness of the deal
+  if ("wackyFrom" %in% names(args)) {
+    wackyFrom <- args$wackyFrom
+    stopifnot(length(wackyFrom) == 1, all(is.numeric(wackyFrom)))
+  } else {
+    wackyFrom <- 1
+  }
+
+  if ("wackyTo" %in% names(args)) {
+    wackyTo <- args$wackyTo
+    stopifnot(length(wackyTo) == 1, all(is.numeric(wackyTo)))
+  } else {
+    wackyTo <- 1
+  }
+
   # Constants ----
   suits <- c("S", "H", "D", "C")
   compassPoints <- c("N", "E", "S", "W")
@@ -90,13 +106,14 @@ bridgeHand <- function(handNumber = "auto", seat = FALSE, createGraphic = TRUE, 
   # Create pack and shuffle ----
   # Create pack
   pack <- expand.grid(rank = c("A", 2:9, "T", "J", "Q", "K"), suit = suits) %>%
-    as_tibble() %>%
+    as_tibble(.name_repair = "minimal") %>%
     mutate(card = paste(suit, rank, sep = "-"))
 
   # Divide cards into hands
   for (i in 1:4) {
-    temp <- sample(pack$card, 13, replace = FALSE) %>%
-      as_tibble() %>%
+    temp <- sample(pack$card, 13, replace = FALSE,
+                   prob = rep(seq(from = wackyFrom, to = wackyTo, length.out = 13), 5-i)) %>%
+      as_tibble(.name_repair = "minimal") %>%
       separate(value, sep = "-", into = c("suit", "rank")) %>%
       mutate(
         suit = factor(suit, levels = c("S", "H", "D", "C")),
@@ -197,7 +214,7 @@ bridgeHand <- function(handNumber = "auto", seat = FALSE, createGraphic = TRUE, 
       filter(value != " ") %>%
       select(value) %>%
       table() %>%
-      as_tibble()
+      as_tibble(.name_repair = "minimal")
 
     points[points$Hand == i, "HC"] <- round(sum(
       unname(unlist(temp[temp$. == "A", "n"])) * HCValues[["A"]],
