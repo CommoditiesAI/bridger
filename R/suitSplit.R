@@ -69,7 +69,7 @@ suitSplit <- function(missingCards = 5, cards_W = 13, cards_E = 13) {
       subtitle = subtitleText,
       x = colnames(outTable[1]), y = NULL
     ) +
-    guides(fill = FALSE) +
+    guides(fill = "none") +
     theme_minimal() +
     theme(
       title = element_text(size = rel(1.2)),

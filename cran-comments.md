@@ -1,5 +1,5 @@
 ## Resubmission
-This is a second re-submission. 
+This is a re-submission. 
 
 Notes from the auto-check service:
 Flavor: r-devel-linux-x86_64-debian-gcc, r-devel-windows-ix86+x86_64
@@ -28,7 +28,7 @@ Check: for detritus in the temp directory, Result: NOTE
 
 ## Test environments
 # Through R-hub
-Windows Server 2008 R2 SP1, R-devel, 32/64 bit
+Windows Server 2008 R2 SP1, R-release, 32/64 bit
 Ubuntu Linux 20.04.1 LTS, R-release, GCC
 Fedora Linux, R-devel, clang, gfortran
 
@@ -37,6 +37,10 @@ Your package bridger_0.1.0.tar.gz has been built (if working) and checked for Wi
 Installation time in seconds: 14
 Check time in seconds: 129
 Status: 1 NOTE
+Maintainer: 'Jason Kaplan <scjase@gmail.com>'
+
+New submission
+
 R Under development (unstable) (2021-04-05 r80144)
 
 ## R CMD check results
@@ -45,8 +49,8 @@ R Under development (unstable) (2021-04-05 r80144)
 ## R-hub test results
 -- bridger 0.1.0: NOTE
 
-  Build ID:   bridger_0.1.0.tar.gz-5992f302e16b4b10a7899048bdbd2106
-  Platform:   Windows Server 2008 R2 SP1, R-devel, 32/64 bit
+  Build ID: 	bridger_0.1.0.tar.gz-7a733e98da194f2b8f86ee90f2098f92
+  Platform: 	Windows Server 2008 R2 SP1, R-release, 32/64 bit
   Submitted:  27m 33.3s ago
   Build time: 8m 0.9s
 
@@ -59,7 +63,7 @@ R Under development (unstable) (2021-04-05 r80144)
 
 -- bridger 0.1.0: NOTE
 
-  Build ID:   bridger_0.1.0.tar.gz-25b79529ee9c47efaa5d4ccde19cc8c1
+  Build ID:   bridger_0.1.0.tar.gz-43f48e364c584a2fb9f7fb4c1503074b
   Platform:   Ubuntu Linux 20.04.1 LTS, R-release, GCC
   Submitted:  27m 33.3s ago
   Build time: 18m 59.3s
@@ -73,7 +77,7 @@ R Under development (unstable) (2021-04-05 r80144)
 
 -- bridger 0.1.0: NOTE
 
-  Build ID:   bridger_0.1.0.tar.gz-d09b5758023648188ae383e15b43e2ab
+  Build ID:   bridger_0.1.0.tar.gz-f4d38c2260ab44798ef962fc3f954e9a
   Platform:   Fedora Linux, R-devel, clang, gfortran
   Submitted:  27m 33.4s ago
   Build time: 19m 43.9s

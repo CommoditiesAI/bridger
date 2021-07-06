@@ -67,6 +67,7 @@ bridgeHand <- function(handNumber = "auto", seat = FALSE, createGraphic = TRUE, 
 
   # Two optional parameters to make the deal a little wacky by affecting sample()'s probability
   # Random effects, rather than direct control of wackiness of the deal
+
   if ("wackyFrom" %in% names(args)) {
     wackyFrom <- args$wackyFrom
     stopifnot(length(wackyFrom) == 1, all(is.numeric(wackyFrom)))
