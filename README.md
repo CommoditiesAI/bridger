@@ -1,7 +1,6 @@
 # bridger
-![This is an image](https://myoctocat.com/assets/images/base-octocat.svg)
 Construct hands for playing bridge or as an aid to  practicing and teaching.
-
+![Bridger logo](inst/figures/hex.png)
 Base system is Benjimised Acol with a weak 1 notrump, but parameters can be amended to allow different conventions to be adapted by setting point ranges and suit lengths.
 
 Outputs are in the form of PDFs with up to six hands per page. The outputs can be customised to show only one seat or all seats. Additional data, such as high-card point count and suit length points are included for those hands shown. An indication of losing trick count (either the original system or the modified system) can also be added.
