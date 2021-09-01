@@ -1,6 +1,6 @@
-# bridger
+# bridger <img src="inst/figures/hex.png" width="100" height="100" align="right">
+
 Construct hands for playing bridge or as an aid to  practicing and teaching.
-<img src="inst/figures/hex.png" width="100" height="100" align="right">
 
 Base system is Benjimised Acol with a weak 1 notrump, but parameters can be amended to allow different conventions to be adapted by setting point ranges and suit lengths.
 
