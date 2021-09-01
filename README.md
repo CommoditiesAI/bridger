@@ -5,8 +5,6 @@
 
 [![CRAN
 status](https://www.r-pkg.org/badges/version/bridger)](https://cran.r-project.org/package=bridger)
-[![R build
-status](https://github.com/tidyverse/bridger/workflows/R-CMD-check/badge.svg)](https://github.com/tidyverse/bridger/actions?workflow=R-CMD-check)
 <!-- badges: end -->
 
 ## Overview
