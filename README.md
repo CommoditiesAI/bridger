@@ -1,4 +1,5 @@
 # bridger
+![This is an image](https://myoctocat.com/assets/images/base-octocat.svg)
 Construct hands for playing bridge or as an aid to  practicing and teaching.
 
 Base system is Benjimised Acol with a weak 1 notrump, but parameters can be amended to allow different conventions to be adapted by setting point ranges and suit lengths.
