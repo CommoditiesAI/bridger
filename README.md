@@ -1,10 +1,11 @@
 # bridger
-<img src="inst/figures/hex.png" width="100" height="100" align="right">
+<img src="inst/figures/hex.png" width="100" height="120" align="right">
 
 <!-- badges: start -->
 
 [![CRAN
 status](https://www.r-pkg.org/badges/version/bridger)](https://cran.r-project.org/package=bridger)
+[![](http://cranlogs.r-pkg.org/badges/grand-total/bridger?color=blue)](https://cran.r-project.org/package=bridger)
 <!-- badges: end -->
 
 ## Overview
