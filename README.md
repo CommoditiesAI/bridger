@@ -18,7 +18,7 @@ Outputs are in the form of PDFs with up to six hands per page. The outputs can b
 ## Installation
 
 ``` r
-# The easiest way to get dplyr is to install the whole tidyverse:
+# The easiest way to get bridger is to install the package from CRAN:
 install.packages("bridger")
 
 ```
